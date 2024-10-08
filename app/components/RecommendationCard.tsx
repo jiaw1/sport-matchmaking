@@ -1,27 +1,18 @@
-"use client";
-
 import { IActivityEvent } from "../lib/definitions";
 import { Icon } from "@iconify/react";
 import Button from "./Button";
-import { useRouter } from "next/navigation";
 
 export interface IActivityEventCardProps {
   activityEvent: IActivityEvent;
 }
 
-const ActivityEventCard = ({ activityEvent }: IActivityEventCardProps) => {
-  const router = useRouter();
-
-  const handleViewDetails = () => {
-    router.push(`/events/${activityEvent.id}`);
-  };
-
+const RecommendationCard = ({ activityEvent }: IActivityEventCardProps) => {
   return (
     <div className="p-4 bg-gray-200 rounded-md w-64 h-64 flex items-center">
       <div className="space-y-3 flex-grow">
         <p className="text-center font-bold">{activityEvent.sport}</p>
         <p className="text-4xl flex justify-center w-full">
-          <Icon icon="mdi:tennis" />
+          <Icon icon="mdi:badminton" />
         </p>
         <div className="space-y-0.5">
           <div className="flex flex-row items-center space-x-1">
@@ -41,6 +32,7 @@ const ActivityEventCard = ({ activityEvent }: IActivityEventCardProps) => {
               <Icon icon="mdi:clock" />
             </div>
             <div className="flex-none">
+              {/* TODO: Add proper formatting */}
               in{" "}
               {Math.round(
                 (activityEvent.startsAt.getTime() - Date.now()) / 60000
@@ -49,10 +41,10 @@ const ActivityEventCard = ({ activityEvent }: IActivityEventCardProps) => {
             </div>
           </div>
         </div>
-        <Button text="View Details" onClick={handleViewDetails} />
+        <Button text="Join" />
       </div>
     </div>
   );
 };
 
-export default ActivityEventCard;
+export default RecommendationCard;

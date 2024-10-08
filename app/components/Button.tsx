@@ -1,11 +1,17 @@
-export interface IButtonProps {
+import React from "react";
+
+interface ButtonProps {
   text: string;
+  onClick?: () => void;
 }
 
-const Button = (props: IButtonProps) => {
+const Button: React.FC<ButtonProps> = ({ text, onClick }) => {
   return (
-    <button className="bg-blue-600 hover:bg-blue-800 px-3 py-2 rounded-lg text-white w-full">
-      {props.text}
+    <button
+      onClick={onClick}
+      className="bg-blue-500 text-white p-2 rounded mt-4 w-full"
+    >
+      {text}
     </button>
   );
 };
