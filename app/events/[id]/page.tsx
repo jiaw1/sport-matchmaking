@@ -1,59 +1,148 @@
-"use client";
-
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import { IActivityEvent } from "@/app/lib/definitions";
 import * as mockData from "@/app/lib/mockData";
-import { Icon } from "@iconify/react";
+import {  Check, EditOutlined, InfoOutlined, LaunchOutlined, LocationOnOutlined, PersonOutline, ShareOutlined, StarOutline, TodayOutlined } from "@mui/icons-material";
+import Image from 'next/image';
 
-export default function EventDetailsPage() {
-  const { id } = useParams();
-  const [eventDetails, setEventDetails] = useState<IActivityEvent | null>(null);
+import { styled, AppBar, Toolbar, IconButton, Typography, Box, Container, Icon, Button } from "@mui/material";
+import Grid from "@mui/material/grid2"
+import DetailHeader from "@/app/components/typography/DetailHeader";
+import ViewParticipantsModal from "@/app/components/ViewParticipantsModal";
+import BackButton from "@/app/components/BackButton";
+import LevelHelpTooltip from "@/app/components/LevelHelpTooltip";
 
-  useEffect(() => {
-    const foundEvent = mockData.activityEvents.find(event => event.id === id);
-    
-    if (foundEvent) {
-      setEventDetails(foundEvent);
-    }
-  }, [id]);
+const drawerWidth = 240;
+
+export default async  function EventDetailsPage({
+    params,
+  }: {
+    params: Promise<{ id: string }>
+  }) {
+  const id = (await params).id  
+  const eventDetails = mockData.activityEvents.find(event => event.id === id);
+  const sport = "Table tennis";
+  const joined = true;
+
+  
 
   if (!eventDetails) {
     return <div>Event not found</div>;
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <button className="text-left mb-4">
-        <Icon icon="mdi:arrow-left" className="text-2xl" />
-      </button>
-      <h1 className="text-5xl font-bold text-center">{eventDetails.sport}</h1>
-      <div className="flex justify-center my-4">
-        <Icon icon="mdi:tennis" className="text-6xl" />
-      </div>
-      <p className="text-center text-lg text-gray-500 mb-4">In 2 hours</p>
-      <div className="bg-gray-100 p-4 rounded-md mb-6">
-        <div className="flex items-center mb-4">
-          <Icon icon="mdi:clock" className="text-xl mr-2" />
-          <p>{eventDetails.startsAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - 
-             {eventDetails.endsAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+    <Box>
+      <AppBar position="fixed" sx={{ zIndex:110, backgroundColor:"rgb(253 247 255)", boxShadow:"0 0 0"}} color="transparent" className="bg-surface-light shadow-none">
+        <Toolbar>
+            <BackButton/>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+            >
+              {sport}
+            </Typography>
+            <Box sx={{ flexGrow: 1 }} />
+            <Box>
+              <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                <EditOutlined/>
+              </IconButton>
+              <IconButton
+                size="large"
+                aria-label="show 17 new notifications"
+                color="inherit"
+              >
+                <ShareOutlined/>
+              </IconButton>
+            </Box>
+          </Toolbar>
+      </AppBar>
+      <Box sx={{mt:{xs: 2, md: 4}}}>
+        <Container sx={{mb: 3}} className="flex flex-col items-center gap-2 no-wrap">
+        <div className="p-4 bg-primary-container-light rounded-full size-fit h-[80px] aspect-square">
+          <Icon sx={{height:"50px", width:"50px"}}><Image src={`/icons/sports/${sport.toLowerCase()}.svg`} alt={`${sport.toLowerCase()} icon`} width={50} height={50}></Image></Icon>
         </div>
-        <div className="flex items-center mb-4">
-          <Icon icon="mdi:account-group" className="text-xl mr-2" />
-          <p>{eventDetails.minParticipants}/{eventDetails.maxParticipants}</p>
-        </div>
-        <div className="flex items-center mb-4">
-          <Icon icon="mdi:map-marker" className="text-xl mr-2" />
-          <p>{eventDetails.location}</p>
-        </div>
-        <p className="text-gray-600 text-justify mt-6">
-        Welcome to play tennis with me!
-        </p>
-      </div>
-      <div className="flex justify-between">
-        <button className="bg-blue-500 text-white py-2 px-4 rounded-md flex-1 mr-2">Chat</button>
-        <button className="bg-red-500 text-white py-2 px-4 rounded-md flex-1 ml-2">Unparticipate</button>
-      </div>
-    </div>
+        {joined?
+        <Container className="flex flex-row justify-center align-middle gap-1">
+          <Check fontSize="small"/>
+          <Typography variant="body2">You have joined this event.</Typography>
+        </Container> : <></>
+        }
+        </Container>
+        <Container sx={{borderRadius:2, p: {xs: 2, md: 3}, display:"flex", flexDirection:"column", gap:4, mb:{xs: 2, md: 4}}} className="bg-surface-container-light">
+          <Box>      
+              <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", gap:1, mb: (12/8)}}>
+                <TodayOutlined fontSize="small"></TodayOutlined>
+                <DetailHeader>Time</DetailHeader>
+              </Box>
+              <Box>
+                <Box>
+                  <Typography variant="body1" sx={{mb:1}}>Monday 06/10/2024</Typography>
+                  <Typography variant="body2" className="text-on-surface-variant-light">14.00-16.00</Typography>
+                </Box>
+              </Box>
+          </Box>
+          <Box>      
+              <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", gap:1, mb: (12/8)}}>
+                <LocationOnOutlined fontSize="small"></LocationOnOutlined>
+                <DetailHeader>Location</DetailHeader>
+              </Box>
+              <Box sx={{display:"flex", flexDirection:"row", gap: 3}}>
+                <Box sx={{flexGrow:"1"}}>
+                  <Typography variant="body1" sx={{mb:1}}>Unisport Otaniemy, Hall B</Typography>
+                  <Typography variant="body2" className="text-on-surface-variant-light">Otaranta 6 02150 Espoo</Typography>
+                </Box>
+                <IconButton aria-label="Open in Google Maps" sx={{height:"fit-content"}}>
+                  <LaunchOutlined></LaunchOutlined>
+                </IconButton>
+              </Box>
+          </Box>
+          <Box>      
+              <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", gap:1, mb: (12/8)}}>
+                <PersonOutline fontSize="small"></PersonOutline>
+                <DetailHeader>Participants</DetailHeader>
+              </Box>
+              <Box>
+                <Box>
+                  <Typography variant="body1" sx={{mb:1}}>3/4</Typography>
+                  <ViewParticipantsModal></ViewParticipantsModal>
+                </Box>
+              </Box>
+          </Box>
+          <Box>      
+              <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", gap:1, mb: 0.5}}>
+                <StarOutline fontSize="small"></StarOutline>
+                <DetailHeader>Level</DetailHeader>
+                <LevelHelpTooltip></LevelHelpTooltip>
+              </Box>
+              <Box>
+                <Box>
+                  <Typography variant="body1">All</Typography>
+                </Box>
+              </Box>
+          </Box>
+          <Box>      
+              <Box sx={{display:"flex", flexDirection:"row", alignItems:"center", gap:1, mb: (12/8)}}>
+                <InfoOutlined fontSize="small"></InfoOutlined>
+                <DetailHeader>Additional information</DetailHeader>
+              </Box>
+              <Box>
+                <Box>
+                  <Typography variant="body1" sx={{mb:1}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vitae pellentesque lectus, in scelerisque ipsum. Proin venenatis justo ut leo mollis, et rutrum ante.</Typography>
+                </Box>
+              </Box>
+          </Box>
+        </Container>
+        <Grid container spacing={2} columns={{xs:6, sm:6, md:12}}>
+          <Grid size={6}>
+            <Button sx={{textTransform:"none", borderRadius:100}} size="large" fullWidth variant="outlined" color="primary" startIcon={<ShareOutlined/>}>Invite participant</Button>
+          </Grid>
+          <Grid size={6}>
+            {joined ?
+            <Button sx={{textTransform:"none", borderRadius:100}} size="large" fullWidth variant="contained" color="tertiary">Withdraw participation</Button> :
+            <Button sx={{textTransform:"none", borderRadius:100}} size="large" fullWidth variant="contained" color="primary">Join</Button> 
+            }
+          </Grid>
+        </Grid>
+      </Box>
+     </Box>
   );
 }
