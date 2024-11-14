@@ -7,6 +7,7 @@ import EventCardHeader from "./typography/EventCardHeader";
 import DetailText from "./typography/DetailText";
 import { LocationOnOutlined, PersonOutline, Today } from "@mui/icons-material";
 import { useState } from "react";
+import { NextLinkComposed } from "./NextLinkComposed";
 
 export default function EventCard(){
   const sport = "Table tennis"
@@ -44,7 +45,7 @@ export default function EventCard(){
         </Grid>
       </CardContent>
       <CardActions sx={{px:2, pb:2, justifyContent: "end"}} className="bg-surface-light">
-        <Button variant="outlined" size="large" sx={{textTransform: "initial", borderRadius: 100}} color="primary" href="/events/event1">Detail</Button>
+        <Button variant="outlined" size="large" sx={{textTransform: "initial", borderRadius: 100}} color="primary" component={NextLinkComposed} to={{pathname:"/events/event1"}}>Detail</Button>
         <Button variant="contained" disabled={joined} size="large" sx={{textTransform: "initial", borderRadius: 100}} color="primary" onClick={() => setJoined(true)}>{joined? "Joined" : "Join"}</Button>
       </CardActions>
     </Card>

@@ -2,7 +2,7 @@
 
 import { ThemeProvider } from "@emotion/react";
 import { Box, createTheme, CssBaseline, Container} from "@mui/material";
-import { NavLinks } from "./NavLinks";
+import { NavLinks } from "./components/NavLinks";
 
 let customTheme = createTheme({
   palette: {

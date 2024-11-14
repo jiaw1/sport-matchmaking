@@ -3,11 +3,16 @@
 import { AccountCircleOutlined, AddCircleOutline,  ExploreOutlined, HomeOutlined, NotificationsOutlined } from "@mui/icons-material";
 import { Badge, BottomNavigation, BottomNavigationAction, Divider, Drawer, List, ListItem, ListItemButton, ListItemText, ListItemIcon, Paper, Toolbar, useMediaQuery, useTheme } from "@mui/material";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Fragment, useState } from "react";
+import { NextLinkComposed } from "./NextLinkComposed";
+
 
 const drawerWidth = 240;
 
+
 export function NavLinks() {
+  const pathname = usePathname();
   const [value, setValue] = useState(0);
   const theme = useTheme();
   const isMobileScreenSize = useMediaQuery(theme.breakpoints.down('md'))
@@ -17,8 +22,8 @@ export function NavLinks() {
         <BottomNavigation showLabels value={value} onChange={(event, newValue) => {
           setValue(newValue);
         }}>
-          <BottomNavigationAction label="Home" icon={<HomeOutlined/>} href="/"><Link href="/"></Link></BottomNavigationAction>
-          <BottomNavigationAction label="Explore" icon={<ExploreOutlined/>}><Link href="/"></Link></BottomNavigationAction>
+          <BottomNavigationAction label="Home" icon={<HomeOutlined/>} component={NextLinkComposed} to={{pathname:"/"}}></BottomNavigationAction>
+          <BottomNavigationAction label="Explore" icon={<ExploreOutlined/>} component={NextLinkComposed} to={{pathname:"/explore"}}></BottomNavigationAction>
           <BottomNavigationAction label="Host" icon={<AddCircleOutline/>}><Link href="/"></Link></BottomNavigationAction>
           <BottomNavigationAction label="Updates" icon={<Badge badgeContent={4} overlap="circular" color="primary">
     <NotificationsOutlined color="action" />
@@ -46,7 +51,7 @@ export function NavLinks() {
         <Divider/>
         <List>
           <ListItem key={"Home"} disablePadding>
-              <ListItemButton selected={value == 0} onClick={() => setValue(0)} href="/">
+              <ListItemButton selected={value == 0} onClick={() => setValue(0)}component={NextLinkComposed} to={{pathname:"/"}}>
                 <ListItemIcon>
                   <HomeOutlined />
                 </ListItemIcon>
@@ -54,12 +59,11 @@ export function NavLinks() {
               </ListItemButton>
             </ListItem>
             <ListItem key={"Explore"} disablePadding>
-              <ListItemButton selected={value == 1} onClick={() => setValue(1)} >
+              <ListItemButton selected={value == 1} onClick={() => setValue(1)}component={NextLinkComposed} to={{pathname:"/explore"}}>
                 <ListItemIcon>
                   <ExploreOutlined />
                 </ListItemIcon>
                 <ListItemText primary={"Explore"}/>
-                <Link href="/"></Link>
               </ListItemButton>
             </ListItem>
             <ListItem key={"Host"} disablePadding>

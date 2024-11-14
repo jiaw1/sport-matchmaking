@@ -9,6 +9,7 @@ import DetailHeader from "@/app/components/typography/DetailHeader";
 import ViewParticipantsModal from "@/app/components/ViewParticipantsModal";
 import BackButton from "@/app/components/BackButton";
 import LevelHelpTooltip from "@/app/components/LevelHelpTooltip";
+import JoinButton from "./JoinButton";
 
 const drawerWidth = 240;
 
@@ -136,10 +137,7 @@ export default async  function EventDetailsPage({
             <Button sx={{textTransform:"none", borderRadius:100}} size="large" fullWidth variant="outlined" color="primary" startIcon={<ShareOutlined/>}>Invite participant</Button>
           </Grid>
           <Grid size={6}>
-            {joined ?
-            <Button sx={{textTransform:"none", borderRadius:100}} size="large" fullWidth variant="contained" color="tertiary">Withdraw participation</Button> :
-            <Button sx={{textTransform:"none", borderRadius:100}} size="large" fullWidth variant="contained" color="primary">Join</Button> 
-            }
+            <JoinButton></JoinButton>
           </Grid>
         </Grid>
       </Box>
