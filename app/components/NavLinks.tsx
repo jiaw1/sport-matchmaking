@@ -10,12 +10,23 @@ import { NextLinkComposed } from "./NextLinkComposed";
 
 const drawerWidth = 240;
 
+function pathnameToIndex(pathname : string  ) {
+  switch (pathname) {
+    case "/":
+      return 0;
+    case "/explore":
+      return 1;
+    default:
+      return 0;
+      break;
+  }
+}
+
 
 export function NavLinks() {
   const pathname = usePathname();
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(pathnameToIndex(pathname));
   const theme = useTheme();
-  const isMobileScreenSize = useMediaQuery(theme.breakpoints.down('md'))
   return (
   <Fragment>
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex:100, display: {md: "none"} }} elevation={3}>

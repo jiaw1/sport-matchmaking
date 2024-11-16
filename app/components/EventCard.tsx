@@ -1,7 +1,6 @@
 "use client";
 
-import { Card, CardContent, Icon, Box, Typography, CardActions, Button } from "@mui/material";
-import Grid from "@mui/material/Grid2"
+import { Card, CardContent, Icon, Box, Typography, CardActions, Button, Grid2 as Grid } from "@mui/material";
 import Image from 'next/image';
 import EventCardHeader from "./typography/EventCardHeader";
 import DetailText from "./typography/DetailText";

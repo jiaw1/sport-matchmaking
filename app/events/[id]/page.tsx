@@ -56,7 +56,7 @@ export default async  function EventDetailsPage({
             </Box>
           </Toolbar>
       </AppBar>
-      <Box sx={{mt:{xs: 2, md: 4}}}>
+      <Box sx={{mt:{xs: 4, md: 6}}}>
         <Container sx={{mb: 3}} className="flex flex-col items-center gap-2 no-wrap">
         <div className="p-4 bg-primary-container-light rounded-full size-fit h-[80px] aspect-square">
           <Icon sx={{height:"50px", width:"50px"}}><Image src={`/icons/sports/${sport.toLowerCase()}.svg`} alt={`${sport.toLowerCase()} icon`} width={50} height={50}></Image></Icon>

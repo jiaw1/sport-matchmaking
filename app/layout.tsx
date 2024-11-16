@@ -4,6 +4,7 @@ import "./globals.css";
 import AppFrame from "./AppFrame"
 
 
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -28,11 +29,11 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body
-        className={`antialiased`}
-      >
-        <AppFrame>{children}</AppFrame>
-      </body>
+        <body
+          className={`antialiased`}
+          >
+          <AppFrame>{children}</AppFrame>
+        </body>
     </html>
   );
 }
