@@ -1,10 +1,11 @@
 "use client";
 
 import { SetStateAction, Dispatch, useState } from "react";
-import { Box, Button, Popover, Typography} from "@mui/material"
-import {  ArrowDropDown, Check, FilterListOutlined} from "@mui/icons-material";
+import { Box, Button, Popover} from "@mui/material"
+import { FilterListOutlined} from "@mui/icons-material";
 import { IEventFilters } from "@/app/lib/definitions";
 import FilterSelectors from "./FilterSelectors";
+import SingleFilterButton from "./SingleFilterButton";
 
 type FilterEventsProps = {
   filters: IEventFilters;
@@ -91,43 +92,15 @@ export default function FilterEvents({filters , setFilters } : FilterEventsProps
           onClick={(event) => handleClick(event, "all")}>
             Filter
         </Button>
-        <Button 
-          sx={{textTransform:"none", borderRadius: 2, flexWrap:"nowrap", textWrap:"nowrap", minWidth:"fit-content"}}  
-          variant={(filters.sports.size == 0) ? "outlined" : "contained"} 
-          size="small" 
-          disableElevation 
-          startIcon={(filters.sports.size == 0) ? <></> :  <Check/>} 
-          endIcon={<ArrowDropDown/>} 
-          color={(filters.sports.size == 0) ? "primary" : "secondaryContainer"} 
-          onClick={(event) => handleClick(event, "sport")}>
-            <span className="max-w-36 overflow-hidden text-ellipsis text-nowrap whitespace-nowrap">
-              {(filters.sports.size == 0) ? "Any sport" : Array.from(filters.sports).join(', ')}
-            </span>
-        </Button>
-        <Button 
-          sx={{textTransform:"none", borderRadius: 2, flexWrap:"nowrap", textWrap:"nowrap", minWidth:"fit-content"}}  
-          variant={(filters.days.size == 0) ? "outlined" : "contained"} 
-          size="small" 
-          disableElevation 
-          startIcon={(filters.days.size == 0) ? <></>: <Check/>} 
-          endIcon={<ArrowDropDown/>} 
-          color={(filters.days.size == 0) ? "primary" : "secondaryContainer"} 
-          onClick={(event) => handleClick(event, "day")}>
-            <span className="max-w-36 overflow-hidden text-ellipsis text-nowrap whitespace-nowrap">
-              {(filters.days.size == 0) ? "Any day" : Array.from(filters.days).map(_ => _.substring(0,3)).join(', ')}
-            </span>
-          </Button>
-        <Button 
-          sx={{textTransform:"none", borderRadius: 2, flexWrap:"nowrap", textWrap:"nowrap", minWidth:"fit-content"}}  
-          variant={(filters.time.startTime == null) ? "outlined" : "contained"} 
-          size="small" 
-          disableElevation 
-          startIcon={(filters.time.startTime == null) ? <></> : <Check/>} 
-          endIcon={<ArrowDropDown/>} 
-          color={(filters.time.startTime == null) ? "primary" : "secondaryContainer"} 
-          onClick={(event) => handleClick(event, "time")}>
-            {(filters.time.startTime && filters.time.endTime)? `${filters.time.startTime.format("HH:mm")} - ${filters.time.endTime.format("HH:mm")}` : "Any time"}
-        </Button>
+        <SingleFilterButton active={(filters.sports.size != 0)} onClick={(event) => handleClick(event, "sport")}>
+          {(filters.sports.size != 0) ? Array.from(filters.sports).join(', ') : "Any sport"}
+        </SingleFilterButton>
+        <SingleFilterButton active={(filters.days.size != 0)} onClick={(event) => handleClick(event, "day")}>
+          {(filters.days.size != 0) ? Array.from(filters.days).join(', ') : "Any sport"}
+        </SingleFilterButton>
+        <SingleFilterButton active={(filters.time.startTime != null)} onClick={(event) => handleClick(event, "time")}>
+          {(filters.time.startTime && filters.time.endTime)? `${filters.time.startTime.format("HH:mm")} - ${filters.time.endTime.format("HH:mm")}` : "Any time"}
+        </SingleFilterButton>
         <Popover 
           id={popOverId}
           open={popOverOpen}

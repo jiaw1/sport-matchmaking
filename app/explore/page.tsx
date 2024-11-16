@@ -1,19 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Tabs, Tab, Container, styled } from "@mui/material"
+import { Box, Tabs, Tab, TabProps, Container, styled } from "@mui/material"
 import { List, MapOutlined, TodayOutlined } from "@mui/icons-material";
 import SearchBar from "../components/SearchBar";
 import FilterEvents from "../components/filter/FilterEvents";
 import { IEventFilters , dayOfWeek} from "../lib/definitions";
 import EventCardsList from "../components/EventCardsList";
-
-
-interface StyledTabsProps {
-  children?: React.ReactNode;
-  value: number;
-  onChange: (event: React.SyntheticEvent, newValue: number) => void;
-}
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -34,7 +27,7 @@ const CustomTabs = styled(Tabs)({
   },
 });
 
-const CustomTab = styled((props: StyledTabsProps) => <Tab disableRipple {...props} />)(
+const CustomTab = styled((props : TabProps) => <Tab disableRipple {...props} />)(
   ({ theme }) => ({
     zIndex:2,
     padding: 4,

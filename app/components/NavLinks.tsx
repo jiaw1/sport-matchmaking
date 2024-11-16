@@ -1,7 +1,7 @@
 "use client"
 
 import { AccountCircleOutlined, AddCircleOutline,  ExploreOutlined, HomeOutlined, NotificationsOutlined } from "@mui/icons-material";
-import { Badge, BottomNavigation, BottomNavigationAction, Divider, Drawer, List, ListItem, ListItemButton, ListItemText, ListItemIcon, Paper, Toolbar, useMediaQuery, useTheme } from "@mui/material";
+import { Badge, BottomNavigation, BottomNavigationAction, Divider, Drawer, List, ListItem, ListItemButton, ListItemText, ListItemIcon, Paper, Toolbar } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, useState } from "react";
@@ -26,7 +26,6 @@ function pathnameToIndex(pathname : string  ) {
 export function NavLinks() {
   const pathname = usePathname();
   const [value, setValue] = useState(pathnameToIndex(pathname));
-  const theme = useTheme();
   return (
   <Fragment>
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex:100, display: {md: "none"} }} elevation={3}>

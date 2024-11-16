@@ -1,5 +1,30 @@
 import { createTheme } from "@mui/material";
 
+// Augment the palette to include a secondary container color
+declare module '@mui/material/styles' {
+  interface Palette {
+    secondaryContainer: Palette['primary'];
+  }
+
+  interface PaletteOptions {
+    secondaryContainer?: PaletteOptions['primary'];
+  }
+}
+
+// Update the Button's color options to include a secondary container option
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    secondaryContainer: true;
+  }
+}
+
+// Update the Chip's color options to include a secondary container option
+declare module '@mui/material/Chip' {
+  interface ChipPropsColorOverrides {
+    secondaryContainer: true;
+  }
+}
+
 let customTheme = createTheme({
   palette: {
     secondary: {

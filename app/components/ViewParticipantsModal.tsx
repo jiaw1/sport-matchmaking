@@ -5,7 +5,7 @@ import { Close, Person } from "@mui/icons-material";
 import { Fragment, useState } from "react";
 import DetailText from "./typography/DetailText";
 
-const CustomDialogTitle = styled(DialogTitle)(({ theme }) => ({
+const CustomDialogTitle = styled(DialogTitle)(() => ({
   '& .MuiTypography-root': {
     fontSize:28, 
     fontWeight: "bold", 
@@ -23,7 +23,7 @@ export default function ViewParticipantsModal() {
       <Button sx={{textTransform:"none"}} size="small" className="" onClick={() => setOpen(true)}>
         <Typography variant="body2" className="text-on-surface-variant-light underline relative right-[5px]">View participants</Typography>
       </Button>
-      <Dialog onClose={() => setOpen(false)} open={open} aria-labedby="participant-list-title" fullWidth sx={{borderRadius: 2}} >
+      <Dialog onClose={() => setOpen(false)} open={open} aria-labelledby="participant-list-title" fullWidth sx={{borderRadius: 2}} >
         <CustomDialogTitle id="participant-list-title" className="!bg-surface-bright-light">Participants</CustomDialogTitle>
         <IconButton
           aria-label="close"
