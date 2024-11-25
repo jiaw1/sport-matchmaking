@@ -1,12 +1,12 @@
-import { IActivityEvent } from "../lib/definitions";
+import { IMatch } from "../lib/definitions";
 import { Icon } from "@iconify/react";
 import Button from "./Button";
 
-export interface IActivityEventCardProps {
-  activityEvent: IActivityEvent;
+export interface IMatchCardProps {
+  activityEvent: IMatch;
 }
 
-const RecommendationCard = ({ activityEvent }: IActivityEventCardProps) => {
+const RecommendationCard = ({ activityEvent }: IMatchCardProps) => {
   return (
     <div className="p-4 bg-gray-200 rounded-md w-64 h-64 flex items-center">
       <div className="space-y-3 flex-grow">

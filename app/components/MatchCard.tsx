@@ -1,15 +1,15 @@
 "use client";
 
-import { IActivityEvent } from "../lib/definitions";
+import { IMatch } from "../lib/definitions";
 import { Icon } from "@iconify/react";
 import Button from "./Button";
 import { useRouter } from "next/navigation";
 
-export interface IActivityEventCardProps {
-  activityEvent: IActivityEvent;
+export interface IMatchCardProps {
+  activityEvent: IMatch;
 }
 
-const ActivityEventCard = ({ activityEvent }: IActivityEventCardProps) => {
+const MatchCard = ({ activityEvent }: IMatchCardProps) => {
   const router = useRouter();
 
   const handleViewDetails = () => {
@@ -55,4 +55,4 @@ const ActivityEventCard = ({ activityEvent }: IActivityEventCardProps) => {
   );
 };
 
-export default ActivityEventCard;
+export default MatchCard;
