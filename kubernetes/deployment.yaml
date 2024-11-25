@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sport-matchmaking-frontend
+  labels:
+    name: sport-matchmaking-frontend
+    app: sport-matchmaking
+spec:
+  selector:
+    matchLabels:
+      name: sport-matchmaking-frontend
+      app: sport-matchmaking
+  template:
+    metadata:
+      labels:
+        name: sport-matchmaking-frontend
+        app: sport-matchmaking
+    spec:
+      containers:
+        - name: sport-matchmaking-frontend
+          image: sport-matchmaking-frontend:latest
+          imagePullPolicy: Never
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "32Mi"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MATCH_SERVICE_URL
+              value: "http://sport-matchmaking-match-service-service:8080"
