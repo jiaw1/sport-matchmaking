@@ -6,6 +6,6 @@ export default function AppHeader({
   children: React.ReactNode;
 }>) {
   return (
-    <Typography variant="h1" sx={{fontWeight: 400, fontSize: {xs: 28, md: 32}, letterSpacing: 0, lineHeight: 1.28, mb: 3}}>{children}</Typography>
+    <Typography variant="h1" sx={{fontWeight: 400, fontSize: {xs: 28, md: 32}, letterSpacing: 0, lineHeight: 1.28}}>{children}</Typography>
   )
 }

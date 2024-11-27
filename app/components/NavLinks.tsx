@@ -16,6 +16,8 @@ function pathnameToIndex(pathname : string  ) {
       return 0;
     case "/explore":
       return 1;
+    case "/host":
+      return 2;
     default:
       return 0;
       break;
@@ -34,7 +36,7 @@ export function NavLinks() {
         }}>
           <BottomNavigationAction label="Home" icon={<HomeOutlined/>} component={NextLinkComposed} to={{pathname:"/"}}></BottomNavigationAction>
           <BottomNavigationAction label="Explore" icon={<ExploreOutlined/>} component={NextLinkComposed} to={{pathname:"/explore"}}></BottomNavigationAction>
-          <BottomNavigationAction label="Host" icon={<AddCircleOutline/>}><Link href="/"></Link></BottomNavigationAction>
+          <BottomNavigationAction label="Host" icon={<AddCircleOutline/>} component={NextLinkComposed} to={{pathname:"/host"}}></BottomNavigationAction>
           <BottomNavigationAction label="Updates" icon={<Badge badgeContent={4} overlap="circular" color="primary">
     <NotificationsOutlined color="action" />
     </Badge>}><Link href="/"></Link></BottomNavigationAction>
@@ -77,12 +79,11 @@ export function NavLinks() {
               </ListItemButton>
             </ListItem>
             <ListItem key={"Host"} disablePadding>
-              <ListItemButton selected={value == 2} onClick={() => setValue(2)} >
+              <ListItemButton selected={value == 2} onClick={() => setValue(2)} component={NextLinkComposed} to={{pathname:"/host"}}>
                 <ListItemIcon>
                   <AddCircleOutline />
                 </ListItemIcon>
                 <ListItemText primary={"Host"}/>
-                <Link href="/"></Link>
               </ListItemButton>
             </ListItem>
             <ListItem key={"Updates"} disablePadding>

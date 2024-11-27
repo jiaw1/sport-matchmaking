@@ -27,7 +27,7 @@ export default function SingleFilterButton({
       endIcon={<ArrowDropDown/>} 
       color={active ? "secondaryContainer" : "primary"} 
       onClick={onClick}>
-        <span className="max-w-36 overflow-hidden text-ellipsis text-nowrap whitespace-nowrap">
+        <span className="max-w-36 overflow-hidden text-ellipsis text-nowrap whitespace-nowrap text-on-surface-light font-medium">
           {children}
         </span>
     </Button>

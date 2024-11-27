@@ -1,8 +1,9 @@
 // import * as mockData from "@/app/lib/mockData";
 import AppHeader from "./components/typography/AppHeader";
 import SearchBar from "./components/SearchBar";
-import CardsSectionHeader from "./components/typography/CardsSectionHeader";
+import SectionHeader from "./components/typography/SectionHeader";
 import EventCardsList from "./components/EventCardsList";
+import { Box } from "@mui/material";
 
 export default function Home() {
   // const upcomingEvent = mockData.activityEvents.find(event => event.sport === "Tennis");
@@ -10,9 +11,11 @@ export default function Home() {
 
   return (
     <div>
-      <AppHeader>Hello John</AppHeader>
+      <Box sx={{mb:3}}>
+        <AppHeader>Hello John</AppHeader>
+      </Box>
       <SearchBar></SearchBar>
-      <CardsSectionHeader>Upcoming matches</CardsSectionHeader>
+      <SectionHeader>Upcoming matches</SectionHeader>
       <EventCardsList></EventCardsList>
       {/* {upcomingEvent && <MatchCard key={upcomingEvent.id} activityEvent={upcomingEvent} />} */}
       <div className="mb-16"></div>

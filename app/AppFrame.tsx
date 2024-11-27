@@ -6,7 +6,7 @@ import CustomTheme from "./theme";
 import { NavLinks } from "./components/NavLinks";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
+import 'dayjs/locale/en-gb';
 
 
 
@@ -18,7 +18,7 @@ export default function AppFrame({
 
   return (
     <ThemeProvider theme={CustomTheme}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
             <Box className="flex">
               <CssBaseline/>
               <NavLinks/>

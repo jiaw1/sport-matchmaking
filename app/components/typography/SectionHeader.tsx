@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 
-export default function CardsSectionHeader({
+export default function SectionHeader({
   children,
 }: Readonly<{
   children: React.ReactNode;
