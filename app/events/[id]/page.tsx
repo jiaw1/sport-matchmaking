@@ -1,4 +1,4 @@
-import { IMatch } from "@/app/lib/definitions";
+// import { IMatch } from "@/app/lib/definitions";
 import * as mockData from "@/app/lib/mockData";
 import {
   Check,
@@ -14,7 +14,7 @@ import {
 import Image from "next/image";
 
 import {
-  styled,
+  // styled,
   AppBar,
   Toolbar,
   IconButton,
@@ -24,14 +24,14 @@ import {
   Icon,
   Button,
 } from "@mui/material";
-import Grid from "@mui/material/grid2";
+import Grid from "@mui/material/Grid2";
 import DetailHeader from "@/app/components/typography/DetailHeader";
 import ViewParticipantsModal from "@/app/components/ViewParticipantsModal";
 import BackButton from "@/app/components/BackButton";
 import LevelHelpTooltip from "@/app/components/LevelHelpTooltip";
 import JoinButton from "./JoinButton";
 
-const drawerWidth = 240;
+// const drawerWidth = 240;
 
 export default async function EventDetailsPage({
   params,
