@@ -1,6 +1,7 @@
 "use client";
 
 // import * as mockData from "@/app/lib/mockData";
+import { useContext } from "react";
 import AppHeader from "./components/typography/AppHeader";
 import SearchBar from "./components/SearchBar";
 import SectionHeader from "./components/typography/SectionHeader";
@@ -10,6 +11,7 @@ import { getSession, signIn, signOut } from "next-auth/react";
 import { checkSession } from "./lib/actions";
 import { Session } from "next-auth";
 import { useEffect, useState } from "react";
+import {EventContext} from "./context/EventContext";
 
 export default function Home() {
   // const { data: session, status } = useSession();
@@ -33,6 +35,10 @@ export default function Home() {
 
   // const upcomingEvent = mockData.activityEvents.find(event => event.sport === "Tennis");
   // const recommendedEvent = mockData.activityEvents.find(event => event.sport === "Badminton");
+  const events = useContext(EventContext);
+  const upcomingEvents = events;
+  const recommendedEvents = [];
+
   return (
     <div>
       <Box sx={{ mb: 3 }}>
@@ -47,7 +53,7 @@ export default function Home() {
       <button onClick={async () => await checkSession()}>Check session</button>
       <SearchBar></SearchBar>
       <SectionHeader>Upcoming matches</SectionHeader>
-      <EventCardsList></EventCardsList>
+      <EventCardsList events={upcomingEvents}></EventCardsList>
       {/* {upcomingEvent && <MatchCard key={upcomingEvent.id} activityEvent={upcomingEvent} />} */}
       <div className="mb-16"></div>
       <h2 className="text-2xl font-semibold mb-6">Recommended for you</h2>

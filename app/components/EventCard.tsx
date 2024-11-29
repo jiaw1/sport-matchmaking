@@ -7,44 +7,66 @@ import DetailText from "./typography/DetailText";
 import { LocationOnOutlined, PersonOutline, Today } from "@mui/icons-material";
 import { useState } from "react";
 import { NextLinkComposed } from "./NextLinkComposed";
+import { IMatch } from "../lib/definitions";
+import dayjs from "dayjs";
 
-export default function EventCard(){
-  const sport = "Table tennis"
+interface IEventCardProps {
+  event: IMatch;
+}
+
+export default function EventCard({event} : IEventCardProps){
   const [joined, setJoined] = useState(false)
+  const eventDayJSStart = dayjs(event.startsAt)
+  const eventDayJSEnd = dayjs(event.endsAt)
+
+  const fromNowText = () => {
+
+    const fromNowDay = eventDayJSStart.diff(dayjs(), "day")
+    const fromNowHour = eventDayJSStart.diff(dayjs(), "hour")
+    
+    console.log(fromNowDay, fromNowHour);
+    if (fromNowDay > 0) {
+      return fromNowDay + 'd';
+    } else {
+      return fromNowHour + 'h';
+    }
+    
+  }
 
   return(
     <Card sx={{ borderRadius: "12px"}} elevation={0}>
       <Box className="eventCardheader flex justify-between text-on-surface-variant-light bg-primary-container-light" sx={{px: 2, py:1}}>
         <Box className="flex gap-1 items-center">
-          <Icon><Image src={`/icons/sports/${sport.toLowerCase()}.svg`} alt={`${sport.toLowerCase()} icon`} width={24} height={24}></Image></Icon>
-          <EventCardHeader>{sport}</EventCardHeader>
+          <Icon><Image src={`/icons/sports/${event.sport.toLowerCase()}.svg`} alt={`${event.sport.toLowerCase()} icon`} width={24} height={24}></Image></Icon>
+          <EventCardHeader>{event.sport}</EventCardHeader>
         </Box>
-        <DetailText>1d</DetailText>
+        <DetailText>{fromNowText()}</DetailText>
       </Box>
       <CardContent className="bg-surface-light">
         <Grid container rowSpacing={2} columnSpacing={4}>
           <Grid size={12}>
             <Box className="flex gap-1 items-center">
               <Today></Today>
-              <Typography variant="body1">Monday 06/10/2024 · 14.00-16.00</Typography>
+              <Typography variant="body1">{`${eventDayJSStart.format("dddd DD/MM/YYYY")} · ${eventDayJSStart.format("HH.mm")}-${eventDayJSEnd.format("HH.mm")}`}</Typography>
             </Box>
           </Grid>
           <Grid size="auto">
           <Box className="flex gap-1 items-center">
               <LocationOnOutlined/>
-              <Typography variant="body1">Unisport Otaniemi, hall B</Typography>
+              <Typography variant="body1">{event.location}</Typography>
             </Box>
           </Grid>
           <Grid size="auto">
           <Box className="flex gap-1 items-center">
               <PersonOutline/>
-              <Typography variant="body1">3/4</Typography>
+              <Typography variant="body1">{`${2}${event.maxParticipants && "/" + event.maxParticipants}`}
+              </Typography>
             </Box>
           </Grid>
         </Grid>
       </CardContent>
       <CardActions sx={{px:2, pb:2, justifyContent: "end"}} className="bg-surface-light">
-        <Button variant="outlined" disableElevation size="large" sx={{textTransform: "initial", borderRadius: 100}} color="primary" component={NextLinkComposed} to={{pathname:"/events/event1"}}>Detail</Button>
+        <Button variant="outlined" disableElevation size="large" sx={{textTransform: "initial", borderRadius: 100}} color="primary" component={NextLinkComposed} to={{pathname:"/events/"+event.id}}>Detail</Button>
         <Button variant="contained" disableElevation disabled={joined} size="large" sx={{textTransform: "initial", borderRadius: 100}} color="primary" onClick={() => setJoined(true)}>{joined? "Joined" : "Join"}</Button>
       </CardActions>
     </Card>

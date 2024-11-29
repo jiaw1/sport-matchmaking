@@ -1,6 +1,6 @@
 import { PickerValidDate } from "@mui/x-date-pickers";
 
-export const Sports = ["Badminton", "Table tennis", "Football", "Basketball"];
+export const Sports = ["Badminton", "Table tennis", "Football", "Basketball", "Tennis"];
 export const DaysOfWeek: dayOfWeek[] = [
   "Monday",
   "Tuesday",
