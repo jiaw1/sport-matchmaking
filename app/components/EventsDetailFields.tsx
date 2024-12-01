@@ -174,8 +174,8 @@ export default function EventDetailsFields({
                 <TextField
                 hiddenLabel
                 type="number"
-                value={defaultValue.participationFee}
-                onChange={(event) => setParticipationFee(Number(event.target.value))}
+                value={defaultValue.participationFee / 100}
+                onChange={(event) => setParticipationFee(Number(event.target.value) * 100)}
                 slotProps={{
                   inputLabel: {
                     shrink: true,

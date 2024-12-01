@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { EventContext } from "../context/EventContext";
 import { Box, Tabs, Tab, TabProps, Container, styled } from "@mui/material"
 import { List, MapOutlined, TodayOutlined } from "@mui/icons-material";
 import SearchBar from "../components/SearchBar";
 import FilterEvents from "../components/filter/FilterEvents";
-import { IEventFilters , dayOfWeek} from "../lib/definitions";
+import { DaysOfWeek, IEventFilters , dayOfWeek} from "../lib/definitions";
 import EventCardsList from "../components/EventCardsList";
+import dayjs from "dayjs";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -74,15 +76,27 @@ function CustomTabPanel(props: TabPanelProps) {
 
 export default function ExplorePage() {
 
+  
   const [filters, setFilters] = useState<IEventFilters>(
     {
-      sports: new Set(["Football", "Table tennis", "Basketball"]),
-      days: new Set<dayOfWeek>(["Monday", "Tuesday", "Wednesday", "Friday","Saturday"]),
+      sports: new Set([]),
+      days: new Set<dayOfWeek>([]),
       time: {
         startTime: null,
         endTime: null
-    }}
-  )
+      }}
+    )
+
+  const events = useContext(EventContext);
+
+  const filteredEvents = events.filter((event) => {
+    return (
+      (filters.sports.size != 0 ? filters.sports.has(event.sport) : true) && 
+      (filters.days.size != 0 ? filters.days.has(dayjs(event.startsAt).format("dddd") as dayOfWeek) : true) &&
+      (filters.time.startTime ?  dayjs(event.startsAt).isAfter(filters.time.startTime) : true) &&
+      (filters.time.startTime ?  dayjs(event.endsAt).isBefore(filters.time.endTime) : true)
+    )
+  })
 
   const [view, setView] = useState(0);
 
@@ -108,7 +122,7 @@ export default function ExplorePage() {
           </CustomTabs>
       </Container>
       <CustomTabPanel value={view} index={0}>
-        <EventCardsList/>
+        <EventCardsList events={filteredEvents}/>
       </CustomTabPanel>
       <CustomTabPanel value={view} index={1}>
         Item Two

@@ -10,6 +10,7 @@ import {
   ShareOutlined,
   StarOutline,
   TodayOutlined,
+  EuroOutlined
 } from "@mui/icons-material";
 import Image from "next/image";
 
@@ -30,6 +31,7 @@ import ViewParticipantsModal from "@/app/components/ViewParticipantsModal";
 import BackButton from "@/app/components/BackButton";
 import LevelHelpTooltip from "@/app/components/LevelHelpTooltip";
 import JoinButton from "./JoinButton";
+import dayjs from "dayjs";
 
 // const drawerWidth = 240;
 
@@ -39,11 +41,10 @@ export default async function EventDetailsPage({
   params: Promise<{ id: string }>;
 }) {
   const id = (await params).id;
-  const matchDetails = mockData.matches.find((match) => match.id === id);
-  const sport = "Table tennis";
-  const joined = true;
+  const event = mockData.matches.find((match) => match.id === id);
+  const joined = false;
 
-  if (!matchDetails) {
+  if (!event) {
     return <div>Match not found</div>;
   }
 
@@ -62,20 +63,21 @@ export default async function EventDetailsPage({
         <Toolbar>
           <BackButton />
           <Typography variant="h6" noWrap component="div">
-            {sport}
+            {event.sport}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box>
             <IconButton
               size="large"
-              aria-label="show 4 new mails"
+              aria-label="edit event"
               color="inherit"
+              href={"/events/edit/" + event.id}
             >
               <EditOutlined />
             </IconButton>
             <IconButton
               size="large"
-              aria-label="show 17 new notifications"
+              aria-label="copy share link"
               color="inherit"
             >
               <ShareOutlined />
@@ -91,8 +93,8 @@ export default async function EventDetailsPage({
           <div className="p-4 bg-primary-container-light rounded-full size-fit h-[80px] aspect-square">
             <Icon sx={{ height: "50px", width: "50px" }}>
               <Image
-                src={`/icons/sports/${sport.toLowerCase()}.svg`}
-                alt={`${sport.toLowerCase()} icon`}
+                src={`/icons/sports/${event.sport.toLowerCase()}.svg`}
+                alt={`${event.sport.toLowerCase()} icon`}
                 width={50}
                 height={50}
               ></Image>
@@ -136,13 +138,13 @@ export default async function EventDetailsPage({
             <Box>
               <Box>
                 <Typography variant="body1" sx={{ mb: 1 }}>
-                  Monday 06/10/2024
+                  {dayjs(event.startsAt).format("dddd DD/MM/YYYY")}
                 </Typography>
                 <Typography
                   variant="body2"
                   className="text-on-surface-variant-light"
                 >
-                  14.00-16.00
+                  {dayjs(event.startsAt).format("HH.mm") + "-" + dayjs(event.endsAt).format("HH.mm")}
                 </Typography>
               </Box>
             </Box>
@@ -162,22 +164,22 @@ export default async function EventDetailsPage({
             </Box>
             <Box sx={{ display: "flex", flexDirection: "row", gap: 3 }}>
               <Box sx={{ flexGrow: "1" }}>
-                <Typography variant="body1" sx={{ mb: 1 }}>
-                  Unisport Otaniemy, Hall B
+                <Typography variant="body1">
+                  {event.location}
                 </Typography>
                 <Typography
                   variant="body2"
                   className="text-on-surface-variant-light"
                 >
-                  Otaranta 6 02150 Espoo
+                  {/* actual address */}
                 </Typography>
               </Box>
-              <IconButton
+              {/* <IconButton
                 aria-label="Open in Google Maps"
-                sx={{ height: "fit-content" }}
+                sx={{ height: "fit-content", mt: 1 }}
               >
                 <LaunchOutlined></LaunchOutlined>
-              </IconButton>
+              </IconButton> */}
             </Box>
           </Box>
           <Box>
@@ -196,12 +198,36 @@ export default async function EventDetailsPage({
             <Box>
               <Box>
                 <Typography variant="body1" sx={{ mb: 1 }}>
-                  3/4
+                {`${2}${event.maxParticipants && "/" + event.maxParticipants} ${event.minParticipants && "(Minimum: "  + event.minParticipants + ")"}`}
                 </Typography>
                 <ViewParticipantsModal></ViewParticipantsModal>
               </Box>
             </Box>
           </Box>
+          {
+            event.participationFee > 0 &&
+            <Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 1,
+                  mb: 12 / 8,
+                }}
+              >
+                <EuroOutlined fontSize="small"></EuroOutlined>
+                <DetailHeader>Participation fee</DetailHeader>
+              </Box>
+              <Box>
+                <Box>
+                  <Typography variant="body1">
+                    €{event.participationFee / 100} 
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          }
           <Box>
             <Box
               sx={{
@@ -218,7 +244,7 @@ export default async function EventDetailsPage({
             </Box>
             <Box>
               <Box>
-                <Typography variant="body1">All</Typography>
+                <Typography variant="body1">{event.level}</Typography>
               </Box>
             </Box>
           </Box>
@@ -238,9 +264,7 @@ export default async function EventDetailsPage({
             <Box>
               <Box>
                 <Typography variant="body1" sx={{ mb: 1 }}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
-                  vitae pellentesque lectus, in scelerisque ipsum. Proin
-                  venenatis justo ut leo mollis, et rutrum ante.
+                  {event.description}
                 </Typography>
               </Box>
             </Box>
