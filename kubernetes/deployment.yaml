@@ -16,6 +16,7 @@ spec:
         name: sport-matchmaking-frontend
         app: sport-matchmaking
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: sport-matchmaking-frontend
           image: sport-matchmaking-frontend:latest
@@ -24,9 +25,11 @@ spec:
             requests:
               cpu: "100m"
               memory: "32Mi"
+              ephemeral-storage: "128Mi"
             limits:
               memory: "256Mi"
               cpu: "500m"
+              ephemeral-storage: "2Gi"
           ports:
             - containerPort: 3000
           env:
