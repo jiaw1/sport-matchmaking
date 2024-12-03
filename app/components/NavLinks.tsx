@@ -18,6 +18,10 @@ function pathnameToIndex(pathname : string  ) {
       return 1;
     case "/host":
       return 2;
+    case "/updates":
+      return 3;
+    case "/settings":
+      return 4;
     default:
       return 0;
       break;
@@ -37,10 +41,13 @@ export function NavLinks() {
           <BottomNavigationAction label="Home" icon={<HomeOutlined/>} component={NextLinkComposed} to={{pathname:"/"}}></BottomNavigationAction>
           <BottomNavigationAction label="Explore" icon={<ExploreOutlined/>} component={NextLinkComposed} to={{pathname:"/explore"}}></BottomNavigationAction>
           <BottomNavigationAction label="Host" icon={<AddCircleOutline/>} component={NextLinkComposed} to={{pathname:"/host"}}></BottomNavigationAction>
-          <BottomNavigationAction label="Updates" icon={<Badge badgeContent={4} overlap="circular" color="primary">
-    <NotificationsOutlined color="action" />
-    </Badge>}><Link href="/"></Link></BottomNavigationAction>
-          <BottomNavigationAction label="Settings" icon={<AccountCircleOutlined/>}><Link href="/"></Link></BottomNavigationAction>
+          <BottomNavigationAction label="Updates" icon={
+              <Badge badgeContent={0} overlap="circular" color="primary">
+                <NotificationsOutlined color="action" />
+              </Badge>
+            } component={NextLinkComposed} to={{pathname:"/updates"}}>
+          </BottomNavigationAction>
+          <BottomNavigationAction label="Settings" icon={<AccountCircleOutlined/>} component={NextLinkComposed} to={{pathname:"/settings"}}></BottomNavigationAction>
         </BottomNavigation>
       </Paper>
 
@@ -87,23 +94,21 @@ export function NavLinks() {
               </ListItemButton>
             </ListItem>
             <ListItem key={"Updates"} disablePadding>
-              <ListItemButton selected={value == 3} onClick={() => setValue(3)} >
+              <ListItemButton selected={value == 3} onClick={() => setValue(3)} component={NextLinkComposed} to={{pathname:"/updates"}}>
                 <ListItemIcon>
-                  <Badge badgeContent={4} overlap="circular" color="primary">
+                  <Badge badgeContent={0} overlap="circular" color="primary">
                     <NotificationsOutlined color="action" />
                   </Badge>
                 </ListItemIcon>
                 <ListItemText primary={"Updates"}/>
-                <Link href="/"></Link>
               </ListItemButton>
             </ListItem>
             <ListItem key={"Settings"} disablePadding>
-              <ListItemButton selected={value == 4} onClick={() => setValue(4)} >
+              <ListItemButton selected={value == 4} onClick={() => setValue(4)} component={NextLinkComposed} to={{pathname:"/settings"}}>
                 <ListItemIcon>
                   <AccountCircleOutlined />
                 </ListItemIcon>
                 <ListItemText primary={"Settings"}/>
-                <Link href="/"></Link>
               </ListItemButton>
             </ListItem>
         </List>
