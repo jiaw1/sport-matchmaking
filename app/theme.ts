@@ -4,10 +4,12 @@ import { createTheme } from "@mui/material";
 declare module '@mui/material/styles' {
   interface Palette {
     secondaryContainer: Palette['primary'];
+    tertiary: Palette['primary'];
   }
 
   interface PaletteOptions {
     secondaryContainer?: PaletteOptions['primary'];
+    tertiary?: PaletteOptions['primary'];
   }
 }
 
@@ -24,6 +26,13 @@ declare module '@mui/material/Chip' {
     secondaryContainer: true;
   }
 }
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
 
 let customTheme = createTheme({
   palette: {
