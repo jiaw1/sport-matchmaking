@@ -1,13 +1,11 @@
 // import { IMatch } from "@/app/lib/definitions";
-import * as mockData from "@/app/lib/mockData";
+// import * as mockData from "@/app/lib/mockData";
 import {
   Check,
   EditOutlined,
   InfoOutlined,
-  LaunchOutlined,
   LocationOnOutlined,
   PersonOutline,
-  ShareOutlined,
   StarOutline,
   TodayOutlined,
   EuroOutlined
@@ -23,15 +21,18 @@ import {
   Box,
   Container,
   Icon,
-  Button,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import DetailHeader from "@/app/components/typography/DetailHeader";
 import ViewParticipantsModal from "@/app/components/ViewParticipantsModal";
 import BackButton from "@/app/components/BackButton";
 import LevelHelpTooltip from "@/app/components/LevelHelpTooltip";
-import JoinButton from "./JoinButton";
+import JoinButton from "../../components/JoinButton";
 import dayjs from "dayjs";
+import { IMatch, IParticipation, matchServiceURL } from "@/app/lib/definitions";
+import { getServerSession } from "next-auth";
+import ShareButton from "@/app/components/ShareButton";
+import { authOptions } from "@/app/lib/auth";
 
 // const drawerWidth = 240;
 
@@ -41,9 +42,11 @@ export default async function EventDetailsPage({
   params: Promise<{ id: string }>;
 }) {
   const id = (await params).id;
-  const event = mockData.matches.find((match) => match.id === id);
+  const session = await getServerSession(authOptions);
+  const currentUserId = session?.user?.email //to replace
+  const event : IMatch = await fetch(`${matchServiceURL}/matches/${id}`).then(_ => _.json())
+  const participants : IParticipation[] = await fetch(`${matchServiceURL}/matches/${id}/participants`).then(_ => _.json())
   const joined = false;
-
   if (!event) {
     return <div>Match not found</div>;
   }
@@ -67,7 +70,8 @@ export default async function EventDetailsPage({
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box>
-            <IconButton
+            { (currentUserId === event.hostUserId) &&
+              <IconButton
               size="large"
               aria-label="edit event"
               color="inherit"
@@ -75,13 +79,9 @@ export default async function EventDetailsPage({
             >
               <EditOutlined />
             </IconButton>
-            <IconButton
-              size="large"
-              aria-label="copy share link"
-              color="inherit"
-            >
-              <ShareOutlined />
-            </IconButton>
+
+            }
+            <ShareButton variant="icon"></ShareButton>
           </Box>
         </Toolbar>
       </AppBar>
@@ -200,7 +200,7 @@ export default async function EventDetailsPage({
                 <Typography variant="body1" sx={{ mb: 1 }}>
                 {`${2}${event.maxParticipants && "/" + event.maxParticipants} ${event.minParticipants && "(Minimum: "  + event.minParticipants + ")"}`}
                 </Typography>
-                <ViewParticipantsModal></ViewParticipantsModal>
+                <ViewParticipantsModal participants={participants} hostID={event.hostUserId}></ViewParticipantsModal>
               </Box>
             </Box>
           </Box>
@@ -272,19 +272,10 @@ export default async function EventDetailsPage({
         </Container>
         <Grid container spacing={2} columns={{ xs: 6, sm: 6, md: 12 }}>
           <Grid size={6}>
-            <Button
-              sx={{ textTransform: "none", borderRadius: 100 }}
-              size="large"
-              fullWidth
-              variant="outlined"
-              color="primary"
-              startIcon={<ShareOutlined />}
-            >
-              Invite participant
-            </Button>
+            <ShareButton variant="full width"></ShareButton>
           </Grid>
           <Grid size={6}>
-            <JoinButton></JoinButton>
+            <JoinButton joined={participants.map(_ => _.userId).includes(currentUserId || "")} eventID={id}></JoinButton>
           </Grid>
         </Grid>
       </Box>

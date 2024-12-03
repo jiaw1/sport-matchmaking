@@ -1,29 +1,27 @@
 "use client";
 
-import { useState, useContext } from "react"
+import { useEffect, useState } from "react"
 import { Alert, Box, Button, IconButton, Snackbar, Stack } from "@mui/material"
 import { Close } from "@mui/icons-material";
 import AppHeader from "@/components/typography/AppHeader"
 import EventDetailsFields from "@/components/EventsDetailFields"
-import { IMatch, IMatchCreate } from "@/lib/definitions"
-import * as mockData from "@/app/lib/mockData";
-import dayjs, {Dayjs} from "dayjs";
-import { clearInterval } from "timers";
-import NextLinkComposed from "@/app/components/NextLinkComposed";
+import { IMatch, IMatchCreate, matchServiceURL } from "@/lib/definitions"
+// import * as mockData from "@/app/lib/mockData";
+import {Dayjs} from "dayjs";
 import { useRouter } from "next/navigation";
 
-const originalMatch = (event: IMatch) : IMatchCreate => ({
-  sport: event.sport,
-  minParticipants: event.minParticipants,
-  maxParticipants: event.maxParticipants,
-  startsAt: event.startsAt,
-  endsAt: event.endsAt,
-  location: event.location,
-  description: event.description,
-  participationFee: event.participationFee,
-  requiredEquipment: event.requiredEquipment,
-  level: event.level,
-  chatLink: event.chatLink
+const originalMatch = (event: IMatch | undefined) : IMatchCreate => ({
+  sport: event?.sport || "",
+  minParticipants: event?.minParticipants,
+  maxParticipants: event?.maxParticipants,
+  startsAt: event?.startsAt || new Date(),
+  endsAt: event?.endsAt || new Date(),
+  location: event?.location || "",
+  description: event?.description || "",
+  participationFee: event?.participationFee || 0,
+  requiredEquipment: event?.requiredEquipment || [],
+  level: event?.level || "All",
+  chatLink: event?.chatLink || ""
 })
 
 export default function EventEditPage({
@@ -33,24 +31,37 @@ export default function EventEditPage({
 }) {
   const id = params.id;
 
-  const event = mockData.matches.find((match) => match.id === id);
-
-  if (!event) {
-    return (
-      <div>
-        Event not found!
-      </div>
-    )
-  }
-
+  
+  
   const router = useRouter();
-
-  const [match, setMatch] = useState<IMatchCreate>(originalMatch(event));
-
+  
+  const [match, setMatch] = useState<IMatchCreate>(originalMatch(undefined));
+  
   const [openErrorSnackbar, setOpenErrorSnackbar] = useState<[boolean, string]>([false, ""]);
-
+  
   const [openSuccessSnackbar, setOpenSuccessSnackbar] = useState<[boolean, string]>([false, ""]);
 
+  const [currentEventFetched, setCurrentEventFetched] = useState(false)
+
+  
+  useEffect(() => {
+    if (!currentEventFetched) {
+      fetch(`${matchServiceURL}/matches/${id}`)
+        .then(_ => _.json())
+        .then(match => setMatch(match))
+        .then(() => setCurrentEventFetched(true))
+        .catch(() => {
+          if (!match.sport) {
+            return (
+              <div>
+                Event not found!
+              </div>
+            )
+          }
+        });
+    }
+  }, [match, currentEventFetched, id])
+  
 
   const setSport = (sport: string) => {
     setMatch({...match, sport: sport});
@@ -150,7 +161,7 @@ export default function EventEditPage({
     setOpenSuccessSnackbar([false, ""]);
   }
 
-  console.log(match);
+  
 
 
   return (

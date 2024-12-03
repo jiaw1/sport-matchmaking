@@ -5,10 +5,12 @@ import Image from 'next/image';
 import EventCardHeader from "./typography/EventCardHeader";
 import DetailText from "./typography/DetailText";
 import { LocationOnOutlined, PersonOutline, Today } from "@mui/icons-material";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { NextLinkComposed } from "./NextLinkComposed";
 import { IMatch } from "../lib/definitions";
 import dayjs from "dayjs";
+import { matchServiceURL } from "../lib/definitions";
+import { getSession } from "next-auth/react";
 
 interface IEventCardProps {
   event: IMatch;
@@ -16,6 +18,28 @@ interface IEventCardProps {
 
 export default function EventCard({event} : IEventCardProps){
   const [joined, setJoined] = useState(false)
+
+  const handleJoinMatch = useCallback(async () => {
+    const session = await getSession();
+    if (joined) {
+      fetch(`${matchServiceURL}/matches/${event.id}/participants`, {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + session?.accessToken,
+        }
+      })
+      .then(() => setJoined(false))
+    } else {
+      fetch(`${matchServiceURL}/matches/${event.id}/participants`, {
+        method: "POST", 
+        headers: {
+          Authorization: "Bearer " + session?.accessToken,
+        }
+      })
+      .then(() => setJoined(false))
+    }
+  }, [event, joined])
+
   const eventDayJSStart = dayjs(event.startsAt)
   const eventDayJSEnd = dayjs(event.endsAt)
 
@@ -67,7 +91,7 @@ export default function EventCard({event} : IEventCardProps){
       </CardContent>
       <CardActions sx={{px:2, pb:2, justifyContent: "end"}} className="bg-surface-light">
         <Button variant="outlined" disableElevation size="large" sx={{textTransform: "initial", borderRadius: 100}} color="primary" component={NextLinkComposed} to={{pathname:"/events/"+event.id}}>Detail</Button>
-        <Button variant="contained" disableElevation disabled={joined} size="large" sx={{textTransform: "initial", borderRadius: 100}} color="primary" onClick={() => setJoined(true)}>{joined? "Joined" : "Join"}</Button>
+        <Button variant="contained" disableElevation disabled={joined} size="large" sx={{textTransform: "initial", borderRadius: 100}} color="primary" onClick={handleJoinMatch}>{joined? "Joined" : "Join"}</Button>
       </CardActions>
     </Card>
   )

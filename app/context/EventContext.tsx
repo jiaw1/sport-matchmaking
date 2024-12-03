@@ -1,11 +1,10 @@
 "use client";
 
-import {useState, useEffect, createContext} from 'react';
+import {useState, useEffect, createContext, Dispatch, SetStateAction} from 'react';
 import { IMatch } from '../lib/definitions';
-import * as mockData from "@/app/lib/mockData";
+import { matchServiceURL } from '../lib/definitions';
 
-
-export const EventContext = createContext<readonly IMatch[]>([]);
+export const EventContext = createContext<[readonly IMatch[], Dispatch<SetStateAction<boolean>>]>([[], () => {}]);
 
 
 export default function EventContextProvider({
@@ -14,20 +13,25 @@ export default function EventContextProvider({
   children: React.ReactNode;
 }>) {
 
+  const [fetched, setFetched] = useState(false);
   const [events, setEvents] = useState<readonly IMatch[]>([]);
 
   const fetchEvents = () => {
     //fetch
-    const matches = mockData.matches;
-    setEvents(matches)
+    // const matches = mockData.matches;
+    fetch(`${matchServiceURL}/matches`).then(_ => _.json()).then(matches => setEvents(matches));
+    // setEvents(matches)
   }
 
   useEffect(() => {
-    fetchEvents();
-  })
+    if(!fetched) {
+      fetchEvents();
+      setFetched(true);
+    }
+  }, [events, fetched])
 
   return (
-    <EventContext.Provider value={events}>
+    <EventContext.Provider value={[events, setFetched]}>
         {children}
     </EventContext.Provider>
   )
