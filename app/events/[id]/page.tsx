@@ -206,7 +206,7 @@ export default async function EventDetailsPage({
             <Box>
               <Box>
                 <Typography variant="body1" sx={{ mb: 1 }}>
-                  {`${2}${
+                  {`${participants.length}${
                     event.maxParticipants && "/" + event.maxParticipants
                   } ${
                     event.minParticipants &&

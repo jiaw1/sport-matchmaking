@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 // import * as mockData from "@/app/lib/mockData";
@@ -8,10 +9,9 @@ import SectionHeader from "./components/typography/SectionHeader";
 import EventCardsList from "./components/EventCardsList";
 import { Box } from "@mui/material";
 import { getSession, signIn, signOut } from "next-auth/react";
-import { checkSession } from "./lib/actions";
 import { Session } from "next-auth";
 import { useEffect, useState } from "react";
-import {EventContext} from "./context/EventContext";
+import { EventContext } from "./context/EventContext";
 
 export default function Home() {
   // const { data: session, status } = useSession();

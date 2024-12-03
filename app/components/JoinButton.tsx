@@ -14,7 +14,7 @@ export default function JoinButton({ joined, eventID }: IJoinButtonProps) {
   const [joinedState, setJoinedState] = useState(joined);
   const handleJoinMatch = useCallback(async () => {
     const session = await getSession();
-    if (joined) {
+    if (joinedState) {
       fetch(`${matchServiceURL}/matches/${eventID}/participants`, {
         method: "DELETE",
         headers: {
@@ -29,10 +29,10 @@ export default function JoinButton({ joined, eventID }: IJoinButtonProps) {
         },
       }).then(() => setJoinedState(false));
     }
-  }, [eventID, joinedState]);
+  }, [joinedState, eventID]);
   return (
     <Fragment>
-      {joined ? (
+      {joinedState ? (
         <Button
           sx={{ textTransform: "none", borderRadius: 100 }}
           size="large"

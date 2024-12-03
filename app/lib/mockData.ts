@@ -14,7 +14,7 @@ export const matches: readonly IMatch[] = [
     requiredEquipment: ["Racket", "Shoes"],
     level: "Novice",
     chatLink: "https://example.com/",
-    hostUserID: "e5ab24d3-0549-4989-af00-4501f5da9896",
+    hostUserId: "e5ab24d3-0549-4989-af00-4501f5da9896",
     createdAt: new Date("2024-11-20T20:00:00Z"),
     updatedAt: new Date("2024-11-20T20:00:00Z"),
   },
@@ -31,7 +31,7 @@ export const matches: readonly IMatch[] = [
     requiredEquipment: [],
     level: "Any",
     chatLink: "https://example.com/",
-    hostUserID: "2001e936-b8a6-4ae7-b96f-f49358d268c0",
+    hostUserId: "2001e936-b8a6-4ae7-b96f-f49358d268c0",
     createdAt: new Date("2024-11-25T10:00:00Z"),
     updatedAt: new Date("2024-11-25T10:00:00Z"),
   },
@@ -48,9 +48,9 @@ export const matches: readonly IMatch[] = [
     requiredEquipment: ["football boots", "shin guards"],
     level: "All",
     chatLink: "https://example.com/football-match",
-    hostUserID: "1f0b234d-789a-4123-a2b1-c5678d9ef012",
+    hostUserId: "1f0b234d-789a-4123-a2b1-c5678d9ef012",
     createdAt: new Date("2024-11-28T15:00:00Z"),
-    updatedAt: new Date("2024-11-28T15:00:00Z")
+    updatedAt: new Date("2024-11-28T15:00:00Z"),
   },
   {
     id: "f567a823-9b1c-4d0e-a456-7890ac123def",
@@ -65,9 +65,9 @@ export const matches: readonly IMatch[] = [
     requiredEquipment: ["racket", "shuttlecock"],
     level: "Professional",
     chatLink: "https://example.com/badminton-match",
-    hostUserID: "3a4b5c6d-e7f8-490a-b1c2-d3e4f5g6h7i8",
+    hostUserId: "3a4b5c6d-e7f8-490a-b1c2-d3e4f5g6h7i8",
     createdAt: new Date("2024-11-28T15:00:00Z"),
-    updatedAt: new Date("2024-11-28T15:00:00Z")
+    updatedAt: new Date("2024-11-28T15:00:00Z"),
   },
   {
     id: "a01b2c3d-4e5f-6g7h-8i9j-0k1l2m3n4o5p",
@@ -82,11 +82,10 @@ export const matches: readonly IMatch[] = [
     requiredEquipment: ["basketball shoes"],
     level: "Casual",
     chatLink: "https://example.com/basketball-pickup",
-    hostUserID: "5678a90b-cdef-0123-4567-89abcdef012",
+    hostUserId: "5678a90b-cdef-0123-4567-89abcdef012",
     createdAt: new Date("2024-11-28T15:00:00Z"),
-    updatedAt: new Date("2024-11-28T15:00:00Z")
-  }
-
+    updatedAt: new Date("2024-11-28T15:00:00Z"),
+  },
 ];
 
 export const match1participations: readonly IParticipation[] = [
