@@ -6,8 +6,7 @@ import { Close } from "@mui/icons-material";
 import AppHeader from "../components/typography/AppHeader"
 import EventDetailsFields from "../components/EventsDetailFields"
 import { IMatchCreate } from "../lib/definitions"
-import dayjs, {Dayjs} from "dayjs";
-import { clearInterval } from "timers";
+import {Dayjs} from "dayjs";
 
 const emptyMatchCreateObject = () : IMatchCreate => ({
   sport: "",
@@ -19,7 +18,7 @@ const emptyMatchCreateObject = () : IMatchCreate => ({
   description: "",
   participationFee: 0,
   requiredEquipment: [],
-  level: "All",
+  level: "Any",
   chatLink: ""
 })
 
