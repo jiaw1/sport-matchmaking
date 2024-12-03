@@ -1,6 +1,12 @@
 import { PickerValidDate } from "@mui/x-date-pickers";
 
-export const Sports = ["Badminton", "Table tennis", "Football", "Basketball", "Tennis"];
+export const Sports = [
+  "Badminton",
+  "Table tennis",
+  "Football",
+  "Basketball",
+  "Tennis",
+];
 export const DaysOfWeek: dayOfWeek[] = [
   "Monday",
   "Tuesday",
@@ -85,3 +91,11 @@ export interface IParticipation {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IKeycloakUser {
+  id: string;
+  firstName: string;
+  username: string;
+}
+
+export type IUserData = IKeycloakUser;
