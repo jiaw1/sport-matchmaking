@@ -7,6 +7,8 @@ export const Sports = [
   "Basketball",
   "Tennis",
 ];
+export const matchServiceURL = "http://34.88.240.144:8080"
+
 export const DaysOfWeek: dayOfWeek[] = [
   "Monday",
   "Tuesday",
@@ -54,7 +56,7 @@ export interface IMatch {
   requiredEquipment: string[];
   level: string;
   chatLink: string;
-  hostUserID: string;
+  hostUserId: string;
   createdAt: Date;
   updatedAt: Date;
 }
