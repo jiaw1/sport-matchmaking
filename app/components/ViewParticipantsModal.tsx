@@ -4,6 +4,7 @@ import { Button, Dialog, DialogTitle, Typography, IconButton, styled, DialogCont
 import { Close, Person } from "@mui/icons-material";
 import { Fragment, useState } from "react";
 import DetailText from "./typography/DetailText";
+import { IParticipation } from "../lib/definitions";
 
 const CustomDialogTitle = styled(DialogTitle)(() => ({
   '& .MuiTypography-root': {
@@ -14,10 +15,14 @@ const CustomDialogTitle = styled(DialogTitle)(() => ({
   },
 }));
 
+interface IViewParticipantsModalProps {
+  participants: IParticipation[];
+  hostID : string;
+}
 
-export default function ViewParticipantsModal() {
+
+export default function ViewParticipantsModal({participants, hostID} : IViewParticipantsModalProps) {
   const [open, setOpen] = useState(false);
-  const owner = true;
   return (
     <Fragment>
       <Button sx={{textTransform:"none"}} size="small" className="" onClick={() => setOpen(true)}>
@@ -38,14 +43,14 @@ export default function ViewParticipantsModal() {
         </IconButton>
         <DialogContent className="!bg-surface-bright-light max-h-[50vh]">
           <List>
-              {Array.from(Array(10)).map((_, index) => (
-            <ListItem divider disableGutters key={index} secondaryAction={owner? <DetailText>Owner</DetailText> : <></>}>
+              {participants.map((participation, index) => (
+            <ListItem divider disableGutters key={index} secondaryAction={participation.userId == hostID ? <DetailText>Owner</DetailText> : <></>}>
               <ListItemAvatar>
                 <Avatar>
                   <Person></Person>
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary="Participant name" secondary="participant.name@aalto.fi"></ListItemText>
+              <ListItemText primary={participation.userId} secondary="participant.name@aalto.fi"></ListItemText>
             </ListItem>
             ))}
           </List>
