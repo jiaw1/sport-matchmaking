@@ -6,9 +6,9 @@ import { Box, Tabs, Tab, TabProps, Container, styled } from "@mui/material"
 import { List, MapOutlined, TodayOutlined } from "@mui/icons-material";
 import SearchBar from "../components/SearchBar";
 import FilterEvents from "../components/filter/FilterEvents";
-import { DaysOfWeek, IEventFilters , dayOfWeek} from "../lib/definitions";
+import {IEventFilters , dayOfWeek} from "../lib/definitions";
 import EventCardsList from "../components/EventCardsList";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -73,6 +73,28 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
+function startTimeIsAfter(filterTime : Dayjs | null, eventStartTime : Dayjs) {
+  if (filterTime) {
+    return (
+      eventStartTime.hour() >= filterTime.hour() ||
+      (eventStartTime.hour() == filterTime.hour() && eventStartTime.minute() >= filterTime.minute())
+    )
+  } else {
+    return true;
+  }
+}
+
+
+function endTimeIsBefore(filterTime : Dayjs | null, eventEndTime : Dayjs) {
+  if (filterTime) {
+    return (
+      eventEndTime.hour() <= filterTime.hour() ||
+      (eventEndTime.hour() == filterTime.hour() && eventEndTime.minute() <= filterTime.minute())
+    )
+  } else {
+    return true;
+  }
+}
 
 export default function ExplorePage() {
 
@@ -87,14 +109,14 @@ export default function ExplorePage() {
       }}
     )
 
-  const events = useContext(EventContext);
+  const [events, setFetched] = useContext(EventContext);
 
   const filteredEvents = events.filter((event) => {
     return (
       (filters.sports.size != 0 ? filters.sports.has(event.sport) : true) && 
       (filters.days.size != 0 ? filters.days.has(dayjs(event.startsAt).format("dddd") as dayOfWeek) : true) &&
-      (filters.time.startTime ?  dayjs(event.startsAt).isAfter(filters.time.startTime) : true) &&
-      (filters.time.startTime ?  dayjs(event.endsAt).isBefore(filters.time.endTime) : true)
+      startTimeIsAfter(filters.time.startTime, dayjs(event.startsAt)) &&
+      endTimeIsBefore(filters.time.endTime, dayjs(event.endsAt))
     )
   })
 
@@ -125,10 +147,10 @@ export default function ExplorePage() {
         <EventCardsList events={filteredEvents}/>
       </CustomTabPanel>
       <CustomTabPanel value={view} index={1}>
-        Item Two
+        Map view coming soon!
       </CustomTabPanel>
       <CustomTabPanel value={view} index={2}>
-        Item Three
+        Calendar view coming soon!
       </CustomTabPanel>
     </Box>
   )
