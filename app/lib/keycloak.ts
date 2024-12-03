@@ -78,7 +78,7 @@ export const fetchUserInfo = async (
     throw new Error("Failed to fetch Keycloak users");
   }
 
-  // Filter users to a map required data
+  // Filter users and collect to a record where user IDs are mapped to IUserData
   const users = parsedKeycloakUsers
     .data!.filter((u) => ids.includes(u.id))
     .reduce<Record<string, IUserData>>(
