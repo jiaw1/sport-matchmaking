@@ -46,7 +46,7 @@ export default function LevelHelpTooltip() {
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
-        <Typography variant='body2' sx={{ p: 1 }}>Skill level of players in this event: Casual, Professional, or All</Typography>
+        <Typography variant='body2' sx={{ p: 1 }}>Skill level of players in this event: Casual, Professional, or Any</Typography>
       </Popover>
     </div>
   );

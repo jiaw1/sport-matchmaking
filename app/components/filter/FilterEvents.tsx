@@ -96,7 +96,7 @@ export default function FilterEvents({filters , setFilters } : FilterEventsProps
           {(filters.sports.size != 0) ? Array.from(filters.sports).join(', ') : "Any sport"}
         </SingleFilterButton>
         <SingleFilterButton active={(filters.days.size != 0)} onClick={(event) => handleClick(event, "day")}>
-          {(filters.days.size != 0) ? Array.from(filters.days).join(', ') : "Any sport"}
+          {(filters.days.size != 0) ? Array.from(filters.days).join(', ') : "Any day"}
         </SingleFilterButton>
         <SingleFilterButton active={(filters.time.startTime != null)} onClick={(event) => handleClick(event, "time")}>
           {(filters.time.startTime && filters.time.endTime)? `${filters.time.startTime.format("HH:mm")} - ${filters.time.endTime.format("HH:mm")}` : "Any time"}
