@@ -79,8 +79,8 @@ export const fetchUserInfo = async (
   }
 
   // Filter users and collect to a record where user IDs are mapped to IUserData
-  const users = parsedKeycloakUsers
-    .data!.filter((u) => ids.includes(u.id))
+  const users = parsedKeycloakUsers.data
+    .filter((u) => ids.includes(u.id))
     .reduce<Record<string, IUserData>>(
       (record, u) => ((record[u.id] = u), record),
       {}

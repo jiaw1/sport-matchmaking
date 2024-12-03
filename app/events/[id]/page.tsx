@@ -8,7 +8,7 @@ import {
   PersonOutline,
   StarOutline,
   TodayOutlined,
-  EuroOutlined
+  EuroOutlined,
 } from "@mui/icons-material";
 import Image from "next/image";
 
@@ -33,23 +33,32 @@ import { IMatch, IParticipation, matchServiceURL } from "@/app/lib/definitions";
 import { getServerSession } from "next-auth";
 import ShareButton from "@/app/components/ShareButton";
 import { authOptions } from "@/app/lib/auth";
+import { fetchUserInfo } from "@/app/lib/keycloak";
 
 // const drawerWidth = 240;
 
 export default async function EventDetailsPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ id: string }>;
-}) {
+}>) {
   const id = (await params).id;
   const session = await getServerSession(authOptions);
-  const currentUserId = session?.user?.email //to replace
-  const event : IMatch = await fetch(`${matchServiceURL}/matches/${id}`).then(_ => _.json())
-  const participants : IParticipation[] = await fetch(`${matchServiceURL}/matches/${id}/participants`).then(_ => _.json())
+  const currentUserId = session?.user?.email; //to replace
+  const event: IMatch = await fetch(`${matchServiceURL}/matches/${id}`).then(
+    (_) => _.json()
+  );
+  const participants: IParticipation[] = await fetch(
+    `${matchServiceURL}/matches/${id}/participants`
+  ).then((_) => _.json());
   const joined = false;
   if (!event) {
     return <div>Match not found</div>;
   }
+
+  const participantsInfoRecord = await fetchUserInfo(
+    participants.map((p) => p.userId)
+  );
 
   return (
     <Box>
@@ -70,17 +79,16 @@ export default async function EventDetailsPage({
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box>
-            { (currentUserId === event.hostUserId) &&
+            {currentUserId === event.hostUserId && (
               <IconButton
-              size="large"
-              aria-label="edit event"
-              color="inherit"
-              href={"/events/edit/" + event.id}
-            >
-              <EditOutlined />
-            </IconButton>
-
-            }
+                size="large"
+                aria-label="edit event"
+                color="inherit"
+                href={"/events/edit/" + event.id}
+              >
+                <EditOutlined />
+              </IconButton>
+            )}
             <ShareButton variant="icon"></ShareButton>
           </Box>
         </Toolbar>
@@ -144,7 +152,9 @@ export default async function EventDetailsPage({
                   variant="body2"
                   className="text-on-surface-variant-light"
                 >
-                  {dayjs(event.startsAt).format("HH.mm") + "-" + dayjs(event.endsAt).format("HH.mm")}
+                  {dayjs(event.startsAt).format("HH.mm") +
+                    "-" +
+                    dayjs(event.endsAt).format("HH.mm")}
                 </Typography>
               </Box>
             </Box>
@@ -164,9 +174,7 @@ export default async function EventDetailsPage({
             </Box>
             <Box sx={{ display: "flex", flexDirection: "row", gap: 3 }}>
               <Box sx={{ flexGrow: "1" }}>
-                <Typography variant="body1">
-                  {event.location}
-                </Typography>
+                <Typography variant="body1">{event.location}</Typography>
                 <Typography
                   variant="body2"
                   className="text-on-surface-variant-light"
@@ -198,14 +206,22 @@ export default async function EventDetailsPage({
             <Box>
               <Box>
                 <Typography variant="body1" sx={{ mb: 1 }}>
-                {`${2}${event.maxParticipants && "/" + event.maxParticipants} ${event.minParticipants && "(Minimum: "  + event.minParticipants + ")"}`}
+                  {`${2}${
+                    event.maxParticipants && "/" + event.maxParticipants
+                  } ${
+                    event.minParticipants &&
+                    "(Minimum: " + event.minParticipants + ")"
+                  }`}
                 </Typography>
-                <ViewParticipantsModal participants={participants} hostID={event.hostUserId}></ViewParticipantsModal>
+                <ViewParticipantsModal
+                  participants={participants}
+                  hostID={event.hostUserId}
+                  participantInfoRecord={participantsInfoRecord}
+                ></ViewParticipantsModal>
               </Box>
             </Box>
           </Box>
-          {
-            event.participationFee > 0 &&
+          {event.participationFee > 0 && (
             <Box>
               <Box
                 sx={{
@@ -222,12 +238,12 @@ export default async function EventDetailsPage({
               <Box>
                 <Box>
                   <Typography variant="body1">
-                    €{event.participationFee / 100} 
+                    €{event.participationFee / 100}
                   </Typography>
                 </Box>
               </Box>
             </Box>
-          }
+          )}
           <Box>
             <Box
               sx={{
@@ -275,7 +291,12 @@ export default async function EventDetailsPage({
             <ShareButton variant="full width"></ShareButton>
           </Grid>
           <Grid size={6}>
-            <JoinButton joined={participants.map(_ => _.userId).includes(currentUserId || "")} eventID={id}></JoinButton>
+            <JoinButton
+              joined={participants
+                .map((_) => _.userId)
+                .includes(currentUserId ?? "")}
+              eventID={id}
+            ></JoinButton>
           </Grid>
         </Grid>
       </Box>

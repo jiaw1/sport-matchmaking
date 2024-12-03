@@ -22,5 +22,3 @@ export const authOptions: AuthOptions = {
     },
   },
 };
-
-// export const getSession = getServerSession(authOptions);
