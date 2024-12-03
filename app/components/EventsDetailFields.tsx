@@ -10,24 +10,24 @@ import { ArrowDropDown } from "@mui/icons-material"
 import DetailHeader from "../components/typography/DetailHeader"
 import LevelHelpTooltip from "../components/LevelHelpTooltip"
 import { IMatchCreate } from "../lib/definitions"
-import dayjs from 'dayjs';
+import dayjs, {Dayjs} from 'dayjs';
 
 
 interface EventDetailsFieldsProps {
   defaultValue: IMatchCreate,
-  setSport: Function,
-  setMinParticipants: Function,
-  setMaxParticipants : Function,
-  setStartsAt : Function,
-  setEndsAt : Function,
-  setDate : Function,
-  setLocation : Function,
-  setDescription : Function,
-  setParticipationFee : Function,
-  addRequiredEquipment : Function,
-  removeRequiredEquipment : Function,
-  setLevel : Function,
-  setChatLink : Function
+  setSport: (sport : string) => void,
+  setMinParticipants: (minParticipants: number) => void,
+  setMaxParticipants : (maxParticipants: number) => void,
+  setStartsAt : (startsAt: Dayjs) => void,
+  setEndsAt : (endsAt: Dayjs) => void,
+  setDate : (date: Dayjs) => void,
+  setLocation : (location : string) => void,
+  setDescription : (description: string) => void,
+  setParticipationFee : (fee: number) => void,
+  addRequiredEquipment : (equipment : string) => void,
+  removeRequiredEquipment : (equipment: string) => void,
+  setLevel : (level : string) => void,
+  setChatLink : (link : string) => void
 
 }
 
@@ -78,7 +78,7 @@ export default function EventDetailsFields({
       <SectionHeader>
         Time *
       </SectionHeader>
-      <DatePicker label="Date" sx={{width: "100%"}} value={dayjs(defaultValue.startsAt)} onChange={(value) => setDate(value)} slotProps={{
+      <DatePicker label="Date" sx={{width: "100%"}} value={dayjs(defaultValue.startsAt)} onChange={(value) => {if (value != null) setDate(value)}} slotProps={{
         textField: {
           helperText: 'DD/MM/YYYY',
         },
@@ -86,10 +86,10 @@ export default function EventDetailsFields({
       </DatePicker>  
       <Stack direction="row" spacing={2} sx={{width: "100%"}}>
           <TimePicker label="Start time" ampm={false} sx={{width: "100%"}} value={dayjs(defaultValue.startsAt)}
-          onChange={(value) => setStartsAt(value)}
+          onChange={(value) => {if (value != null) setStartsAt(value)}}
           ></TimePicker>
           <TimePicker label="End time" ampm={false} sx={{width: "100%"}} value={dayjs(defaultValue.endsAt)}
-          onChange={(value) => setEndsAt(value)}
+          onChange={(value) => {if (value != null) setEndsAt(value)}}
           ></TimePicker>
       </Stack>     
     </Stack>
@@ -161,10 +161,10 @@ export default function EventDetailsFields({
                     sx={{borderRadius: 3, textTransform: "none"}}
                     size="large"          
                     disableElevation                          
-                    variant={defaultValue.level === "All" ? "contained" : "outlined"}                      
-                    color={defaultValue.level === "All" ? "secondaryContainer" : "primary"}
-                    onClick={() => setLevel("All")}>
-                      All
+                    variant={defaultValue.level === "Any" ? "contained" : "outlined"}                      
+                    color={defaultValue.level === "Any" ? "secondaryContainer" : "primary"}
+                    onClick={() => setLevel("Any")}>
+                      Any
                   </Button>
               </Stack>
             </Stack>
