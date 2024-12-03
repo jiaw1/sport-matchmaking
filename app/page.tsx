@@ -35,22 +35,22 @@ export default function Home() {
 
   // const upcomingEvent = mockData.activityEvents.find(event => event.sport === "Tennis");
   // const recommendedEvent = mockData.activityEvents.find(event => event.sport === "Badminton");
-  const events = useContext(EventContext);
+  const [events, setFetched] = useContext(EventContext);
   const upcomingEvents = events;
-  const recommendedEvents = [];
+  // const recommendedEvents = [];
 
   return (
     <div>
       <Box sx={{ mb: 3 }}>
-        <AppHeader>Hello {session?.user?.name ?? "John"}</AppHeader>
+        <AppHeader>Hello {session?.user?.name ?? ""}</AppHeader>
       </Box>
       {/* TODO: REMOVE THIS TEST SIGN IN BUTTON */}
-      {!session ? (
+      {/* {!session ? (
         <button onClick={() => signIn()}>Sign in</button>
       ) : (
         <button onClick={() => signOut()}>Sign out</button>
       )}
-      <button onClick={async () => await checkSession()}>Check session</button>
+      <button onClick={async () => await checkSession()}>Check session</button> */}
       <SearchBar></SearchBar>
       <SectionHeader>Upcoming matches</SectionHeader>
       <EventCardsList events={upcomingEvents}></EventCardsList>
