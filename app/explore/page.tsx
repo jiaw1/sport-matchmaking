@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { EventContext } from "../context/EventContext";
 import { Box, Tabs, Tab, TabProps, Container, styled } from "@mui/material";
 import { List, MapOutlined, TodayOutlined } from "@mui/icons-material";
@@ -9,6 +9,8 @@ import FilterEvents from "../components/filter/FilterEvents";
 import { IEventFilters, dayOfWeek } from "../lib/definitions";
 import EventCardsList from "../components/EventCardsList";
 import dayjs, { Dayjs } from "dayjs";
+import { Session } from "next-auth";
+import { getSession, signIn } from "next-auth/react";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -98,6 +100,23 @@ function endTimeIsBefore(filterTime: Dayjs | null, eventEndTime: Dayjs) {
 }
 
 export default function ExplorePage() {
+  // Hacky way to avoid issues with hydration:
+  // https://github.com/nextauthjs/next-auth/discussions/5719#discussioncomment-9914137
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const session = await getSession();
+      setSession(session);
+      setLoading(false);
+    };
+    fetchSession();
+  }, []);
+  if (!loading && !session) {
+    signIn();
+  }
+
   const [filters, setFilters] = useState<IEventFilters>({
     sports: new Set([]),
     days: new Set<dayOfWeek>([]),
