@@ -125,11 +125,15 @@ export default function HostPage() {
         },
         body: JSON.stringify(match)
       })
-      .then(() => {
-        handleCloseErrorSnackbar();
-        clear();
-        setOpenSuccessSnackbar([true, "Match created successfully!"]);
-        refetchEvents();
+      .then((response) => {
+        if (response.status == 201) {
+          setOpenSuccessSnackbar([true, "Match created successfully!"]);
+          handleCloseErrorSnackbar();
+          refetchEvents();
+          clear();
+        } else {
+          setOpenErrorSnackbar([false, "Error creating match!"]);
+        }
       })
     } else {
       setOpenErrorSnackbar([!validated, errorMessage]);

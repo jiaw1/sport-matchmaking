@@ -155,10 +155,14 @@ export default function EventEditPage({
         },
         body: JSON.stringify(match)
       })
-      .then(() => {
-        handleCloseErrorSnackbar();
-        setOpenSuccessSnackbar([true, "Match edited successfully!"]);
-        refetchEvents();
+      .then((response) => {
+        if (response.status == 201) {
+          setOpenSuccessSnackbar([true, "Match edited successfully!"]);
+          handleCloseErrorSnackbar();
+          refetchEvents();
+        } else {
+          setOpenErrorSnackbar([false, "Error editing match!"]);
+        }
       })
     } else {
       setOpenErrorSnackbar([!validated, errorMessage]);
