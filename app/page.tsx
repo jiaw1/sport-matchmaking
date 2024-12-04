@@ -56,7 +56,7 @@ export default function Home() {
       <EventCardsList events={upcomingEvents}></EventCardsList>
       {/* {upcomingEvent && <MatchCard key={upcomingEvent.id} activityEvent={upcomingEvent} />} */}
       <div className="mb-16"></div>
-      <h2 className="text-2xl font-semibold mb-6">Recommended for you</h2>
+      {/* <h2 className="text-2xl font-semibold mb-6">Recommended for you</h2> */}
       {/* {recommendedEvent && <RecommendationCard key={recommendedEvent.id} activityEvent={recommendedEvent} />} */}
     </div>
   );
