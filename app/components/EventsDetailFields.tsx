@@ -97,7 +97,7 @@ EventDetailsFieldsProps) {
           label="Date"
           sx={{ width: "100%" }}
           value={dayjs(defaultValue.startsAt)}
-          onChange={(value) => {
+          onAccept={(value) => {
             if (value != null) setDate(value);
           }}
           slotProps={{
@@ -112,7 +112,7 @@ EventDetailsFieldsProps) {
             ampm={false}
             sx={{ width: "100%" }}
             value={dayjs(defaultValue.startsAt)}
-            onChange={(value) => {
+            onAccept={(value) => {
               if (value != null) setStartsAt(value);
             }}
           ></TimePicker>
@@ -121,7 +121,7 @@ EventDetailsFieldsProps) {
             ampm={false}
             sx={{ width: "100%" }}
             value={dayjs(defaultValue.endsAt)}
-            onChange={(value) => {
+            onAccept={(value) => {
               if (value != null) setEndsAt(value);
             }}
           ></TimePicker>

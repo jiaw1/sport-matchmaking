@@ -121,6 +121,7 @@ export default function HostPage() {
         method: "POST",
         headers: {
           Authorization: "Bearer " + session?.accessToken,
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(match)
       })

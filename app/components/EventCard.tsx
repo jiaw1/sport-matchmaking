@@ -99,7 +99,7 @@ export default function EventCard({event} : IEventCardProps){
           <Grid size="auto">
           <Box className="flex gap-1 items-center">
               <PersonOutline/>
-              <Typography variant="body1">{`${participantNumber}${event.maxParticipants && "/" + event.maxParticipants}`}
+              <Typography variant="body1">{`${participantNumber}${event.maxParticipants != null ? "/" + event.maxParticipants : ""}`}
               </Typography>
             </Box>
           </Grid>

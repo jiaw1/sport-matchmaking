@@ -214,9 +214,7 @@ export default async function EventDetailsPage({
             <Box>
               <Box>
                 <Typography variant="body1" sx={{ mb: 1 }}>
-                  {`${participants.length}${
-                    event.maxParticipants && "/" + event.maxParticipants
-                  } ${
+                  {`${participants.length}${event.maxParticipants != null ? "/" + event.maxParticipants : ""} ${
                     event.minParticipants &&
                     "(Minimum: " + event.minParticipants + ")"
                   }`}
