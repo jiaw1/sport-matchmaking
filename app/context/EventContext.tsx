@@ -12,7 +12,7 @@ export default function EventContextProvider({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
+  console.log("contexrt")
   const [fetched, setFetched] = useState(false);
   const [events, setEvents] = useState<readonly IMatch[]>([]);
 

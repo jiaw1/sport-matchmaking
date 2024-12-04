@@ -151,6 +151,7 @@ export default function EventEditPage({
         method: "PUT",
         headers: {
           Authorization: "Bearer " + session?.accessToken,
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(match)
       })
