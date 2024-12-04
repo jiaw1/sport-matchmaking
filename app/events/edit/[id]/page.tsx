@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { Alert, Box, Button, IconButton, Snackbar, Stack } from "@mui/material"
 import { Close } from "@mui/icons-material";
 import AppHeader from "@/components/typography/AppHeader"
@@ -9,6 +9,8 @@ import { IMatch, IMatchCreate, matchServiceURL } from "@/lib/definitions"
 // import * as mockData from "@/app/lib/mockData";
 import {Dayjs} from "dayjs";
 import { useRouter } from "next/navigation";
+import { EventContext } from "@/app/context/EventContext";
+import { getSession } from "next-auth/react";
 
 const originalMatch = (event: IMatch | undefined) : IMatchCreate => ({
   sport: event?.sport || "",
@@ -31,7 +33,7 @@ export default function EventEditPage({
 }) {
   const id = params.id;
 
-  
+  const refetchEvents = useContext(EventContext)[1]
   
   const router = useRouter();
   
@@ -123,35 +125,44 @@ export default function EventEditPage({
   //   setMatch(originalMatch(event))
   // }
 
-  const validateMatch = () : [boolean, string] => {
-    if (!match.sport) {
-      return [false, "Please select a sport!"];
-    } 
-    if (Date.now() > match.startsAt.valueOf() || Date.now() > match.endsAt.valueOf()) {
-      return [false, "Please select a time in the future!"];
+  const updateMatch = useCallback(async () => {
+    const validateMatch = () : [boolean, string] => {
+      if (!match.sport) {
+        return [false, "Please select a sport!"];
+      } 
+      if (Date.now() > match.startsAt.valueOf() || Date.now() > match.endsAt.valueOf()) {
+        return [false, "Please select a time in the future!"];
+      }
+      if (match.startsAt.valueOf() > match.endsAt.valueOf()) {
+        return [false, "Please select an end time later than the start time!"];
+      }
+      if (!match.location) {
+        return [false, "Please provide the location!"];
+      }
+      return [true, ""];
     }
-    if (match.startsAt.valueOf() > match.endsAt.valueOf()) {
-      return [false, "Please select an end time later than the start time!"];
-    }
-    if (!match.location) {
-      return [false, "Please provide the location!"];
-    }
-    return [true, ""];
-  }
 
-  const updateMatch = () => {
     const [validated, errorMessage] = validateMatch();
     if (validated) {
       //Create match
+      const session = await getSession();
 
-      handleCloseErrorSnackbar();
-
-      //Put this in callback
-      setOpenSuccessSnackbar([true, "Match created successfully!"]);
+      fetch(`${matchServiceURL}/matches/${id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: "Bearer " + session?.accessToken,
+        },
+        body: JSON.stringify(match)
+      })
+      .then(() => {
+        handleCloseErrorSnackbar();
+        setOpenSuccessSnackbar([true, "Match edited successfully!"]);
+        refetchEvents();
+      })
     } else {
       setOpenErrorSnackbar([!validated, errorMessage]);
     }
-  }
+  }, [match, id, refetchEvents])
 
   const handleCloseErrorSnackbar = () => {
     setOpenErrorSnackbar([false, ""]);
