@@ -21,6 +21,7 @@ import {
   Box,
   Container,
   Icon,
+  Button
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import DetailHeader from "@/app/components/typography/DetailHeader";
@@ -44,14 +45,17 @@ export default async function EventDetailsPage({
 }>) {
   const id = (await params).id;
   const session = await getServerSession(authOptions);
-  const currentUserId = session?.user?.email; //to replace
+  const currentUserId = session?.user?.accountId; //to replace
   const event: IMatch = await fetch(`${matchServiceURL}/matches/${id}`).then(
     (_) => _.json()
   );
   const participants: IParticipation[] = await fetch(
     `${matchServiceURL}/matches/${id}/participants`
   ).then((_) => _.json());
-  const joined = false;
+
+  const joined = participants.map(_ => _.userId).includes(currentUserId || "");
+  const isHost = event.hostUserId === currentUserId
+
   if (!event) {
     return <div>Match not found</div>;
   }
@@ -79,7 +83,7 @@ export default async function EventDetailsPage({
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box>
-            {currentUserId === event.hostUserId && (
+            {isHost && (
               <IconButton
                 size="large"
                 aria-label="edit event"
@@ -112,7 +116,7 @@ export default async function EventDetailsPage({
             <Container className="flex flex-row justify-center align-middle gap-1">
               <Check fontSize="small" />
               <Typography variant="body2">
-                You have joined this event.
+                {isHost ? "You are the host of this event." : "You have joined this event." }
               </Typography>
             </Container>
           ) : (
@@ -214,6 +218,7 @@ export default async function EventDetailsPage({
                   }`}
                 </Typography>
                 <ViewParticipantsModal
+                  currentUserId={currentUserId || ""}
                   participants={participants}
                   hostID={event.hostUserId}
                   participantInfoRecord={participantsInfoRecord}
@@ -291,12 +296,27 @@ export default async function EventDetailsPage({
             <ShareButton variant="full width"></ShareButton>
           </Grid>
           <Grid size={6}>
-            <JoinButton
-              joined={participants
-                .map((_) => _.userId)
-                .includes(currentUserId ?? "")}
-              eventID={id}
-            ></JoinButton>
+            {
+              !isHost ?
+                <JoinButton
+                  joined={participants
+                    .map((_) => _.userId)
+                    .includes(currentUserId ?? "")}
+                    eventID={id}
+                ></JoinButton> 
+                :
+                <Button
+                  sx={{ textTransform: "none", borderRadius: 100 }}
+                  size="large"
+                  disableElevation
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  href={"/events/edit/" + event.id}
+                >
+                  Edit event
+                </Button>
+            }
           </Grid>
         </Grid>
       </Box>

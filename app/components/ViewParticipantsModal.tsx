@@ -29,12 +29,14 @@ const CustomDialogTitle = styled(DialogTitle)(() => ({
 }));
 
 interface IViewParticipantsModalProps {
+  currentUserId: string;
   participants: IParticipation[];
   hostID: string;
   participantInfoRecord: Record<string, IUserData>;
 }
 
 export default function ViewParticipantsModal({
+  currentUserId,
   participants,
   hostID,
   participantInfoRecord,
@@ -91,6 +93,9 @@ export default function ViewParticipantsModal({
                   participation.userId == hostID ? (
                     <DetailText>Owner</DetailText>
                   ) : (
+                    currentUserId == hostID ? (
+                      <DetailText>You</DetailText>
+                    ) :
                     <></>
                   )
                 }
