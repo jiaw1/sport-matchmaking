@@ -13,7 +13,7 @@ export default function ShareButton({variant} : IShareButtonProps) {
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleButtonClick : MouseEventHandler<HTMLButtonElement> = () => {
-    const copyText = document.querySelector("#currentURL") as HTMLInputElement;;
+    const copyText = document.querySelector("#currentURL") as HTMLInputElement;
     copyText.select();
     document.execCommand("copy");
     setOpenSnackbar(true);
