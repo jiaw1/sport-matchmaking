@@ -214,14 +214,10 @@ export default async function EventDetailsPage({
             <Box>
               <Box>
                 <Typography variant="body1" sx={{ mb: 1 }}>
-                  {`${participants.length}${
-                    event.maxParticipants != null
-                      ? "/" + event.maxParticipants
-                      : ""
-                  } ${
-                    event.minParticipants &&
-                    "(Minimum: " + event.minParticipants + ")"
-                  }`}
+                  {
+                    `${participants.length}${event.maxParticipants != null ? "/" + event.maxParticipants : ""} ${
+                    event.minParticipants != null ? "(Minimum: " + event.minParticipants + ")" : ""}`
+                  }
                 </Typography>
                 <ViewParticipantsModal
                   currentUserId={currentUserId || ""}
