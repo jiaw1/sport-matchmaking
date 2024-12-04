@@ -1,17 +1,18 @@
 "use client";
 
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { Alert, Box, Button, IconButton, Snackbar, Stack } from "@mui/material"
 import { Close } from "@mui/icons-material";
 import AppHeader from "../components/typography/AppHeader"
 import EventDetailsFields from "../components/EventsDetailFields"
-import { IMatchCreate } from "../lib/definitions"
+import { IMatchCreate, matchServiceURL } from "../lib/definitions"
 import {Dayjs} from "dayjs";
+import { getSession } from "next-auth/react";
 
 const emptyMatchCreateObject = () : IMatchCreate => ({
   sport: "",
-  minParticipants: undefined,
-  maxParticipants: undefined,
+  minParticipants: null,
+  maxParticipants: null,
   startsAt: new Date(),
   endsAt: new Date(Date.now() + 60*60*1000),
   location: "",
@@ -89,36 +90,46 @@ export default function HostPage() {
     setMatch(emptyMatchCreateObject())
   }
 
-  const validateMatch = () : [boolean, string] => {
-    if (!match.sport) {
-      return [false, "Please select a sport!"];
-    } 
-    if (Date.now() > match.startsAt.valueOf() || Date.now() > match.endsAt.valueOf()) {
-      return [false, "Please select a time in the future!"];
-    }
-    if (match.startsAt.valueOf() > match.endsAt.valueOf()) {
-      return [false, "Please select an end time later than the start time!"];
-    }
-    if (!match.location) {
-      return [false, "Please provide the location!"];
-    }
-    return [true, ""];
-  }
+  
+  const createMatch = useCallback(async () => {
 
-  const createMatch = () => {
+    const validateMatch = () : [boolean, string] => {
+      if (!match.sport) {
+        return [false, "Please select a sport!"];
+      } 
+      if (Date.now() > match.startsAt.valueOf() || Date.now() > match.endsAt.valueOf()) {
+        return [false, "Please select a time in the future!"];
+      }
+      if (match.startsAt.valueOf() > match.endsAt.valueOf()) {
+        return [false, "Please select an end time later than the start time!"];
+      }
+      if (!match.location) {
+        return [false, "Please provide the location!"];
+      }
+      return [true, ""];
+    }
+
     const [validated, errorMessage] = validateMatch();
     if (validated) {
       //Create match
+      const session = await getSession();
 
-      handleCloseErrorSnackbar();
-      clear();
-
-      //Put this in callback
-      setOpenSuccessSnackbar([true, "Match created successfully!"]);
+      fetch(`${matchServiceURL}/matches/`, {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + session?.accessToken,
+        },
+        body: JSON.stringify(match)
+      })
+      .then(() => {
+        handleCloseErrorSnackbar();
+        clear();
+        setOpenSuccessSnackbar([true, "Match created successfully!"]);
+      })
     } else {
       setOpenErrorSnackbar([!validated, errorMessage]);
     }
-  }
+  }, [match])
 
   const handleCloseErrorSnackbar = () => {
     setOpenErrorSnackbar([false, ""]);
@@ -127,9 +138,6 @@ export default function HostPage() {
   const handleCloseSuccessSnackbar = () => {
     setOpenSuccessSnackbar([false, ""]);
   }
-
-  console.log(match);
-
 
   return (
     <Box>
