@@ -13,14 +13,10 @@ export default function ShareButton({variant} : IShareButtonProps) {
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleButtonClick : MouseEventHandler<HTMLButtonElement> = () => {
-    navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
-      if (result.state === "granted" || result.state === "prompt") {
-        /* write to the clipboard now */
-        navigator.clipboard.writeText(window.location.href).then(() =>
-          setOpenSnackbar(true)
-        )
-      }
-    });
+    const copyText = document.querySelector("#currentURL") as HTMLInputElement;;
+    copyText.select();
+    document.execCommand("copy");
+    setOpenSnackbar(true);
   }
 
   const handleCloseSnackbar = () => {
@@ -29,6 +25,7 @@ export default function ShareButton({variant} : IShareButtonProps) {
 
   return (
     <Fragment>
+      <input type="text" name="currentURL" id="currentURL" className="hide-element" value={window.location.href}></input>
       {
         variant == "full width" &&
         <Button
