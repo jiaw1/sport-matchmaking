@@ -139,6 +139,18 @@ export default function EventEditPage({
       if (!match.location) {
         return [false, "Please provide the location!"];
       }
+      if (match.minParticipants != null && (match.minParticipants < 2 || match.minParticipants > 2147483647)) {
+        return [false, "Make sure minimum participants are larger than 2 and smaller than 2147483647!"];
+      }
+      if (match.maxParticipants != null && (match.maxParticipants < 2 || match.maxParticipants > 2147483647)) {
+        return [false, "Make sure maximum participants are larger than 2 and smaller than 2147483647!"];
+      }
+      if (match.maxParticipants != null && match.minParticipants != null && match.maxParticipants <= match.minParticipants) {
+        return [false, "Maximum participants should be larger than minimum participants!"];
+      }
+      if (match.participationFee < 0 || match.participationFee > 9223372036854775807) {
+        return [false, "Make sure participation fee is not negative and not too large!"];
+      }
       return [true, ""];
     }
 
@@ -161,7 +173,7 @@ export default function EventEditPage({
           handleCloseErrorSnackbar();
           refetchEvents();
         } else {
-          setOpenErrorSnackbar([false, "Error editing match!"]);
+          setOpenErrorSnackbar([true, "Error editing match!"]);
         }
       })
     } else {
