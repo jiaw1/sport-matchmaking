@@ -2,7 +2,8 @@
 
 import { Close, ShareOutlined } from "@mui/icons-material";
 import { Alert, Button, IconButton, Snackbar } from "@mui/material";
-import { Fragment, useState } from "react";
+import { Fragment, MouseEventHandler, useState } from "react";
+
 
 interface IShareButtonProps {
   variant: "full width" | "icon";
@@ -11,9 +12,15 @@ interface IShareButtonProps {
 export default function ShareButton({variant} : IShareButtonProps) {
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const handleButtonClick = () => {
-    navigator.clipboard.writeText(window.location.href)
-    setOpenSnackbar(true);
+  const handleButtonClick : MouseEventHandler<HTMLButtonElement> = () => {
+    navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
+      if (result.state === "granted" || result.state === "prompt") {
+        /* write to the clipboard now */
+        navigator.clipboard.writeText(window.location.href).then(() =>
+          setOpenSnackbar(true)
+        )
+      }
+    });
   }
 
   const handleCloseSnackbar = () => {
