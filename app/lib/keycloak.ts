@@ -3,7 +3,7 @@
 import { IUserData } from "./definitions";
 import { keycloakUsersSchema } from "./schemas";
 
-const KEYCLOAK_BASE_URL = process.env.KEYCLOAK_BASE_URL ?? "";
+const KEYCLOAK_BASE_URL = process.env.KEYCLOAK_BASE_URL ?? "http://34.54.17.30";
 const KEYCLOAK_REALM = process.env.KEYCLOAK_REALM ?? "";
 const KEYCLOAK_ID = process.env.KEYCLOAK_ID ?? "";
 const KEYCLOAK_SECRET = process.env.KEYCLOAK_SECRET ?? "";

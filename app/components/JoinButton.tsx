@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, Fragment, useCallback, useEffect, useContext } from "react";
+import { useState, Fragment, useCallback, useContext } from "react";
 import { Button } from "@mui/material";
 import { matchServiceURL } from "@/app/lib/definitions";
 import { getSession } from "next-auth/react";
-import {EventContext} from "../context/EventContext";
+import { EventContext } from "../context/EventContext";
 
 interface IJoinButtonProps {
   joined: boolean;
@@ -12,7 +12,7 @@ interface IJoinButtonProps {
 }
 
 export default function JoinButton({ joined, eventID }: IJoinButtonProps) {
-  const refetchEvents = useContext(EventContext)[1]
+  const refetchEvents = useContext(EventContext)[1];
   const [joinedState, setJoinedState] = useState(joined);
   const handleJoinMatch = useCallback(async () => {
     const session = await getSession();
@@ -23,8 +23,8 @@ export default function JoinButton({ joined, eventID }: IJoinButtonProps) {
           Authorization: "Bearer " + session?.accessToken,
         },
       })
-      .then(() => setJoinedState(false))
-      .then(() => refetchEvents());
+        .then(() => setJoinedState(false))
+        .then(() => refetchEvents());
     } else {
       fetch(`${matchServiceURL}/matches/${eventID}/participants`, {
         method: "POST",
@@ -32,20 +32,22 @@ export default function JoinButton({ joined, eventID }: IJoinButtonProps) {
           Authorization: "Bearer " + session?.accessToken,
         },
       })
-      .then(() => setJoinedState(true))
-      .then(() => refetchEvents());
+        .then(() => setJoinedState(true))
+        .then(() => refetchEvents());
     }
-  }, [joinedState, eventID]);
+  }, [joinedState, eventID, refetchEvents]);
 
-  useEffect(() => {
-    const fetchJoinedStatus = async () => {
-      const participants = await fetch(`${matchServiceURL}/matches/${eventID}/participants`).then(_ => _.json())
-      const session = await getSession();
-      setJoinedState(participants.includes(session?.user.accountId))
-    }
-    fetchJoinedStatus();
-  }, [eventID])
-  
+  // useEffect(() => {
+  //   const fetchJoinedStatus = async () => {
+  //     const participants = await fetch(
+  //       `${matchServiceURL}/matches/${eventID}/participants`
+  //     ).then((_) => _.json());
+  //     const session = await getSession();
+  //     setJoinedState(participants.includes(session?.user.accountId));
+  //   };
+  //   fetchJoinedStatus();
+  // }, [eventID]);
+
   return (
     <Fragment>
       {joinedState ? (

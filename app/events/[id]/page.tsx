@@ -21,7 +21,7 @@ import {
   Box,
   Container,
   Icon,
-  Button
+  Button,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import DetailHeader from "@/app/components/typography/DetailHeader";
@@ -53,8 +53,10 @@ export default async function EventDetailsPage({
     `${matchServiceURL}/matches/${id}/participants`
   ).then((_) => _.json());
 
-  const joined = participants.map(_ => _.userId).includes(currentUserId || "");
-  const isHost = event.hostUserId === currentUserId
+  const joined = participants
+    .map((_) => _.userId)
+    .includes(currentUserId ?? "");
+  const isHost = event.hostUserId === currentUserId;
 
   if (!event) {
     return <div>Match not found</div>;
@@ -116,7 +118,9 @@ export default async function EventDetailsPage({
             <Container className="flex flex-row justify-center align-middle gap-1">
               <Check fontSize="small" />
               <Typography variant="body2">
-                {isHost ? "You are the host of this event." : "You have joined this event." }
+                {isHost
+                  ? "You are the host of this event."
+                  : "You have joined this event."}
               </Typography>
             </Container>
           ) : (
@@ -296,27 +300,21 @@ export default async function EventDetailsPage({
             <ShareButton variant="full width"></ShareButton>
           </Grid>
           <Grid size={6}>
-            {
-              !isHost ?
-                <JoinButton
-                  joined={participants
-                    .map((_) => _.userId)
-                    .includes(currentUserId ?? "")}
-                    eventID={id}
-                ></JoinButton> 
-                :
-                <Button
-                  sx={{ textTransform: "none", borderRadius: 100 }}
-                  size="large"
-                  disableElevation
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  href={"/events/edit/" + event.id}
-                >
-                  Edit event
-                </Button>
-            }
+            {!isHost ? (
+              <JoinButton joined={joined} eventID={id}></JoinButton>
+            ) : (
+              <Button
+                sx={{ textTransform: "none", borderRadius: 100 }}
+                size="large"
+                disableElevation
+                fullWidth
+                variant="contained"
+                color="primary"
+                href={"/events/edit/" + event.id}
+              >
+                Edit event
+              </Button>
+            )}
           </Grid>
         </Grid>
       </Box>

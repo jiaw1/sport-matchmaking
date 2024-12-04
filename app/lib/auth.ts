@@ -19,7 +19,7 @@ export const authOptions: AuthOptions = {
     },
     session: async ({ session, token }) => {
       session.accessToken = token.accessToken;
-      if(token.accountId) {
+      if (token.accountId) {
         session.user.accountId = token.accountId;
       }
       return session;
