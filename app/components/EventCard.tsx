@@ -7,7 +7,7 @@ import DetailText from "./typography/DetailText";
 import { LocationOnOutlined, PersonOutline, Today } from "@mui/icons-material";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { NextLinkComposed } from "./NextLinkComposed";
-import { IMatch } from "../lib/definitions";
+import { IMatch, IParticipation } from "../lib/definitions";
 import dayjs from "dayjs";
 import { matchServiceURL } from "../lib/definitions";
 import { getSession } from "next-auth/react";
@@ -48,9 +48,9 @@ export default function EventCard({event} : IEventCardProps){
 
   useEffect(() => {
     const fetchParticipantsDataAndSetStates = async () => {
-      const participants = await fetch(`${matchServiceURL}/matches/${event.id}/participants`).then(_ => _.json())
+      const participants : IParticipation[] = await fetch(`${matchServiceURL}/matches/${event.id}/participants`).then(_ => _.json())
       const session = await getSession();
-      setJoined(participants.includes(session?.user.accountId))
+      setJoined(participants.map(_ => _.userId).includes(session?.user.accountId || ""))
       setParticipantNumber(participants.length)
       setIsHost(event.hostUserId === session?.user.accountId)
     }
