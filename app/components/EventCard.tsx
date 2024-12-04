@@ -5,7 +5,7 @@ import Image from 'next/image';
 import EventCardHeader from "./typography/EventCardHeader";
 import DetailText from "./typography/DetailText";
 import { LocationOnOutlined, PersonOutline, Today } from "@mui/icons-material";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { NextLinkComposed } from "./NextLinkComposed";
 import { IMatch } from "../lib/definitions";
 import dayjs from "dayjs";
@@ -17,7 +17,9 @@ interface IEventCardProps {
 }
 
 export default function EventCard({event} : IEventCardProps){
-  const [joined, setJoined] = useState(false)
+  const [joined, setJoined] = useState(false);
+  const [participantNumber, setParticipantNumber] = useState(0);
+  const [isHost, setIsHost] = useState(false);
 
   const handleJoinMatch = useCallback(async () => {
     const session = await getSession();
@@ -36,9 +38,20 @@ export default function EventCard({event} : IEventCardProps){
           Authorization: "Bearer " + session?.accessToken,
         }
       })
-      .then(() => setJoined(false))
+      .then(() => setJoined(true))
     }
   }, [event, joined])
+
+  useEffect(() => {
+    const fetchParticipantsDataAndSetStates = async () => {
+      const participants = await fetch(`${matchServiceURL}/matches/${event.id}/participants`).then(_ => _.json())
+      const session = await getSession();
+      setJoined(participants.includes(session?.user.accountId))
+      setParticipantNumber(participants.length)
+      setIsHost(event.hostUserId === session?.user.accountId)
+    }
+    fetchParticipantsDataAndSetStates();
+  }, [event])
 
   const eventDayJSStart = dayjs(event.startsAt)
   const eventDayJSEnd = dayjs(event.endsAt)
@@ -83,7 +96,7 @@ export default function EventCard({event} : IEventCardProps){
           <Grid size="auto">
           <Box className="flex gap-1 items-center">
               <PersonOutline/>
-              <Typography variant="body1">{`${2}${event.maxParticipants && "/" + event.maxParticipants}`}
+              <Typography variant="body1">{`${participantNumber}${event.maxParticipants && "/" + event.maxParticipants}`}
               </Typography>
             </Box>
           </Grid>
@@ -91,7 +104,11 @@ export default function EventCard({event} : IEventCardProps){
       </CardContent>
       <CardActions sx={{px:2, pb:2, justifyContent: "end"}} className="bg-surface-light">
         <Button variant="outlined" disableElevation size="large" sx={{textTransform: "initial", borderRadius: 100}} color="primary" component={NextLinkComposed} to={{pathname:"/events/"+event.id}}>Detail</Button>
-        <Button variant="contained" disableElevation disabled={joined} size="large" sx={{textTransform: "initial", borderRadius: 100}} color="primary" onClick={handleJoinMatch}>{joined? "Joined" : "Join"}</Button>
+        {
+          isHost ?
+            <Button variant="contained" disableElevation disabled={true} size="large" sx={{textTransform: "initial", borderRadius: 100}} color="primary">You are the host</Button> :
+            <Button variant="contained" disableElevation disabled={joined} size="large" sx={{textTransform: "initial", borderRadius: 100}} color="primary" onClick={handleJoinMatch}>{joined? "Joined" : "Join"}</Button>
+        }
       </CardActions>
     </Card>
   )

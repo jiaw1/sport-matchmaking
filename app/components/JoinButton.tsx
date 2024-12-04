@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Fragment, useCallback } from "react";
+import { useState, Fragment, useCallback, useEffect } from "react";
 import { Button } from "@mui/material";
 import { matchServiceURL } from "@/app/lib/definitions";
 import { getSession } from "next-auth/react";
@@ -27,9 +27,19 @@ export default function JoinButton({ joined, eventID }: IJoinButtonProps) {
         headers: {
           Authorization: "Bearer " + session?.accessToken,
         },
-      }).then(() => setJoinedState(false));
+      }).then(() => setJoinedState(true));
     }
   }, [joinedState, eventID]);
+
+  useEffect(() => {
+    const fetchJoinedStatus = async () => {
+      const participants = await fetch(`${matchServiceURL}/matches/${eventID}/participants`).then(_ => _.json())
+      const session = await getSession();
+      setJoinedState(participants.includes(session?.user.accountId))
+    }
+    fetchJoinedStatus();
+  }, [eventID])
+  
   return (
     <Fragment>
       {joinedState ? (
