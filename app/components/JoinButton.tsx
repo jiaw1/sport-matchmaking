@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, Fragment, useCallback, useEffect } from "react";
+import { useState, Fragment, useCallback, useEffect, useContext } from "react";
 import { Button } from "@mui/material";
 import { matchServiceURL } from "@/app/lib/definitions";
 import { getSession } from "next-auth/react";
+import {EventContext} from "../context/EventContext";
 
 interface IJoinButtonProps {
   joined: boolean;
@@ -11,6 +12,7 @@ interface IJoinButtonProps {
 }
 
 export default function JoinButton({ joined, eventID }: IJoinButtonProps) {
+  const refetchEvents = useContext(EventContext)[1]
   const [joinedState, setJoinedState] = useState(joined);
   const handleJoinMatch = useCallback(async () => {
     const session = await getSession();
@@ -20,14 +22,18 @@ export default function JoinButton({ joined, eventID }: IJoinButtonProps) {
         headers: {
           Authorization: "Bearer " + session?.accessToken,
         },
-      }).then(() => setJoinedState(false));
+      })
+      .then(() => setJoinedState(false))
+      .then(() => refetchEvents());
     } else {
       fetch(`${matchServiceURL}/matches/${eventID}/participants`, {
         method: "POST",
         headers: {
           Authorization: "Bearer " + session?.accessToken,
         },
-      }).then(() => setJoinedState(true));
+      })
+      .then(() => setJoinedState(true))
+      .then(() => refetchEvents());
     }
   }, [joinedState, eventID]);
 

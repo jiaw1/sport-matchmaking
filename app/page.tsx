@@ -35,7 +35,7 @@ export default function Home() {
 
   // const upcomingEvent = mockData.activityEvents.find(event => event.sport === "Tennis");
   // const recommendedEvent = mockData.activityEvents.find(event => event.sport === "Badminton");
-  const [events, setFetched] = useContext(EventContext);
+  const [events, refetchEvents] = useContext(EventContext);
   const upcomingEvents = events;
   // const recommendedEvents = [];
 

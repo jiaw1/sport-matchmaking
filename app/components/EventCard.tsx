@@ -5,18 +5,20 @@ import Image from 'next/image';
 import EventCardHeader from "./typography/EventCardHeader";
 import DetailText from "./typography/DetailText";
 import { LocationOnOutlined, PersonOutline, Today } from "@mui/icons-material";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { NextLinkComposed } from "./NextLinkComposed";
 import { IMatch } from "../lib/definitions";
 import dayjs from "dayjs";
 import { matchServiceURL } from "../lib/definitions";
 import { getSession } from "next-auth/react";
+import { EventContext } from "../context/EventContext";
 
 interface IEventCardProps {
   event: IMatch;
 }
 
 export default function EventCard({event} : IEventCardProps){
+  const refetchEvents = useContext(EventContext)[1]
   const [joined, setJoined] = useState(false);
   const [participantNumber, setParticipantNumber] = useState(0);
   const [isHost, setIsHost] = useState(false);
@@ -31,6 +33,7 @@ export default function EventCard({event} : IEventCardProps){
         }
       })
       .then(() => setJoined(false))
+      .then(() => refetchEvents())
     } else {
       fetch(`${matchServiceURL}/matches/${event.id}/participants`, {
         method: "POST", 
@@ -39,8 +42,9 @@ export default function EventCard({event} : IEventCardProps){
         }
       })
       .then(() => setJoined(true))
+      .then(() => refetchEvents())
     }
-  }, [event, joined])
+  }, [event, joined, refetchEvents])
 
   useEffect(() => {
     const fetchParticipantsDataAndSetStates = async () => {
@@ -61,7 +65,6 @@ export default function EventCard({event} : IEventCardProps){
     const fromNowDay = eventDayJSStart.diff(dayjs(), "day")
     const fromNowHour = eventDayJSStart.diff(dayjs(), "hour")
     
-    console.log(fromNowDay, fromNowHour);
     if (fromNowDay > 0) {
       return fromNowDay + 'd';
     } else {

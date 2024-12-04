@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react"
+import { useCallback, useContext, useState } from "react"
 import { Alert, Box, Button, IconButton, Snackbar, Stack } from "@mui/material"
 import { Close } from "@mui/icons-material";
 import AppHeader from "../components/typography/AppHeader"
@@ -8,6 +8,7 @@ import EventDetailsFields from "../components/EventsDetailFields"
 import { IMatchCreate, matchServiceURL } from "../lib/definitions"
 import {Dayjs} from "dayjs";
 import { getSession } from "next-auth/react";
+import {EventContext} from "../context/EventContext";
 
 const emptyMatchCreateObject = () : IMatchCreate => ({
   sport: "",
@@ -28,6 +29,8 @@ export default function HostPage() {
 
   const [openErrorSnackbar, setOpenErrorSnackbar] = useState<[boolean, string]>([false, ""]);
   const [openSuccessSnackbar, setOpenSuccessSnackbar] = useState<[boolean, string]>([false, ""]);
+
+  const refetchEvents = useContext(EventContext)[1]
 
 
   const setSport = (sport: string) => {
@@ -125,11 +128,12 @@ export default function HostPage() {
         handleCloseErrorSnackbar();
         clear();
         setOpenSuccessSnackbar([true, "Match created successfully!"]);
+        refetchEvents();
       })
     } else {
       setOpenErrorSnackbar([!validated, errorMessage]);
     }
-  }, [match])
+  }, [match, refetchEvents])
 
   const handleCloseErrorSnackbar = () => {
     setOpenErrorSnackbar([false, ""]);

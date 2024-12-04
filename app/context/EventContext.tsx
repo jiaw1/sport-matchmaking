@@ -1,10 +1,10 @@
 "use client";
 
-import {useState, useEffect, createContext, Dispatch, SetStateAction} from 'react';
+import {useState, useEffect, createContext} from 'react';
 import { IMatch } from '../lib/definitions';
 import { matchServiceURL } from '../lib/definitions';
 
-export const EventContext = createContext<[readonly IMatch[], Dispatch<SetStateAction<boolean>>]>([[], () => {}]);
+export const EventContext = createContext<[readonly IMatch[], () => void]>([[], () => {}]);
 
 
 export default function EventContextProvider({
@@ -30,8 +30,10 @@ export default function EventContextProvider({
     }
   }, [events, fetched])
 
+  const refetchEvents = () => setFetched(false);
+
   return (
-    <EventContext.Provider value={[events, setFetched]}>
+    <EventContext.Provider value={[events, refetchEvents]}>
         {children}
     </EventContext.Provider>
   )
