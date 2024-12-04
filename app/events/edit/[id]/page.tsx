@@ -6,7 +6,6 @@ import { Close } from "@mui/icons-material";
 import AppHeader from "@/components/typography/AppHeader";
 import EventDetailsFields from "@/components/EventsDetailFields";
 import { IMatch, IMatchCreate, matchServiceURL } from "@/lib/definitions";
-// import * as mockData from "@/app/lib/mockData";
 import { Dayjs } from "dayjs";
 import { useRouter } from "next/navigation";
 import { EventContext } from "@/app/context/EventContext";
@@ -14,20 +13,22 @@ import { getSession, signIn } from "next-auth/react";
 import { Session } from "next-auth";
 
 const originalMatch = (event: IMatch | undefined): IMatchCreate => ({
-  sport: event?.sport || "",
+  sport: event?.sport ?? "",
   minParticipants: event?.minParticipants,
   maxParticipants: event?.maxParticipants,
-  startsAt: event?.startsAt || new Date(),
-  endsAt: event?.endsAt || new Date(),
-  location: event?.location || "",
-  description: event?.description || "",
-  participationFee: event?.participationFee || 0,
+  startsAt: event?.startsAt ?? new Date(),
+  endsAt: event?.endsAt ?? new Date(),
+  location: event?.location ?? "",
+  description: event?.description ?? "",
+  participationFee: event?.participationFee ?? 0,
   requiredEquipment: event?.requiredEquipment || [],
-  level: event?.level || "All",
-  chatLink: event?.chatLink || "",
+  level: event?.level ?? "All",
+  chatLink: event?.chatLink ?? "",
 });
 
-export default function EventEditPage({ params }: { params: { id: string } }) {
+export default function EventEditPage({
+  params,
+}: Readonly<{ params: { id: string } }>) {
   // Hacky way to avoid issues with hydration:
   // https://github.com/nextauthjs/next-auth/discussions/5719#discussioncomment-9914137
   const [session, setSession] = useState<Session | null>(null);
@@ -149,10 +150,6 @@ export default function EventEditPage({ params }: { params: { id: string } }) {
     setMatch({ ...match, chatLink: chatLink });
   };
 
-  // const clear = () => {
-  //   setMatch(originalMatch(event))
-  // }
-
   const updateMatch = useCallback(async () => {
     const validateMatch = (): [boolean, string] => {
       if (!match.sport) {
@@ -200,7 +197,7 @@ export default function EventEditPage({ params }: { params: { id: string } }) {
       }
       if (
         match.participationFee < 0 ||
-        match.participationFee > 9223372036854775807
+        BigInt(match.participationFee) > BigInt("9223372036854775807")
       ) {
         return [
           false,

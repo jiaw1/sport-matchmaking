@@ -177,7 +177,7 @@ export default function HostPage() {
       }
       if (
         match.participationFee < 0 ||
-        match.participationFee > 9223372036854775807
+        BigInt(match.participationFee) > BigInt("9223372036854775807")
       ) {
         return [
           false,

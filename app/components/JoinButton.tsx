@@ -11,7 +11,10 @@ interface IJoinButtonProps {
   eventID: string;
 }
 
-export default function JoinButton({ joined, eventID }: IJoinButtonProps) {
+export default function JoinButton({
+  joined,
+  eventID,
+}: Readonly<IJoinButtonProps>) {
   const refetchEvents = useContext(EventContext)[1];
   const [joinedState, setJoinedState] = useState(joined);
   const handleJoinMatch = useCallback(async () => {
@@ -36,17 +39,6 @@ export default function JoinButton({ joined, eventID }: IJoinButtonProps) {
         .then(() => refetchEvents());
     }
   }, [joinedState, eventID, refetchEvents]);
-
-  // useEffect(() => {
-  //   const fetchJoinedStatus = async () => {
-  //     const participants = await fetch(
-  //       `${matchServiceURL}/matches/${eventID}/participants`
-  //     ).then((_) => _.json());
-  //     const session = await getSession();
-  //     setJoinedState(participants.includes(session?.user.accountId));
-  //   };
-  //   fetchJoinedStatus();
-  // }, [eventID]);
 
   return (
     <Fragment>

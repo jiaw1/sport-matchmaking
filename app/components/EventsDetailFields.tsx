@@ -7,7 +7,7 @@ import {
   TextField,
 } from "@mui/material";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
-import { Sports } from "../lib/definitions";
+import { Sports, IMatchCreate } from "../lib/definitions";
 import Image from "next/image";
 import SectionHeader from "../components/typography/SectionHeader";
 import Accordion from "@mui/material/Accordion";
@@ -16,7 +16,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import { ArrowDropDown } from "@mui/icons-material";
 import DetailHeader from "../components/typography/DetailHeader";
 import LevelHelpTooltip from "../components/LevelHelpTooltip";
-import { IMatchCreate } from "../lib/definitions";
+
 import dayjs, { Dayjs } from "dayjs";
 
 interface EventDetailsFieldsProps {
@@ -153,7 +153,7 @@ EventDetailsFieldsProps) {
                 <TextField
                   label="Minimum"
                   type="number"
-                  value={defaultValue.minParticipants || ""}
+                  value={defaultValue.minParticipants ?? ""}
                   onChange={(event) =>
                     setMinParticipants(Number(event.target.value))
                   }
@@ -166,7 +166,7 @@ EventDetailsFieldsProps) {
                 <TextField
                   label="Maximum"
                   type="number"
-                  value={defaultValue.maxParticipants || ""}
+                  value={defaultValue.maxParticipants ?? ""}
                   onChange={(event) =>
                     setMaxParticipants(Number(event.target.value))
                   }
