@@ -153,7 +153,7 @@ EventDetailsFieldsProps) {
                 <TextField
                   label="Minimum"
                   type="number"
-                  value={defaultValue.minParticipants}
+                  value={defaultValue.minParticipants || ""}
                   onChange={(event) =>
                     setMinParticipants(Number(event.target.value))
                   }
@@ -166,7 +166,7 @@ EventDetailsFieldsProps) {
                 <TextField
                   label="Maximum"
                   type="number"
-                  value={defaultValue.maxParticipants}
+                  value={defaultValue.maxParticipants || ""}
                   onChange={(event) =>
                     setMaxParticipants(Number(event.target.value))
                   }
