@@ -35,3 +35,6 @@ spec:
           env:
             - name: MATCH_SERVICE_URL
               value: "http://sport-matchmaking-match-service-service:8080"
+          envFrom:
+            - secretRef:
+                name: sport-matchmaking-frontend-secrets
