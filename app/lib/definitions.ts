@@ -7,7 +7,7 @@ export const Sports = [
   "Basketball",
   "Tennis",
 ];
-export const matchServiceURL = "http://34.88.240.144:8080"
+export const matchServiceURL = "https://match-service.sport-matchmaking.thong.cam"
 
 export const DaysOfWeek: dayOfWeek[] = [
   "Monday",
