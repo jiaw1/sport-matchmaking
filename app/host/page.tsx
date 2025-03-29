@@ -25,11 +25,6 @@ const emptyMatchCreateObject = (): IMatchCreate => ({
   chatLink: "",
 });
 
-export const metadata = {
-  title: "Host | Sport Matchmaking",
-  description: "Host a match",
-}
-
 export default function HostPage() {
   // Hacky way to avoid issues with hydration:
   // https://github.com/nextauthjs/next-auth/discussions/5719#discussioncomment-9914137
