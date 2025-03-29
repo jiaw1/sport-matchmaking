@@ -9,6 +9,18 @@ export const authOptions: AuthOptions = {
       issuer: process.env.KEYCLOAK_ISSUER ?? "",
     }),
   ],
+  cookies: {
+    sessionToken: {
+      name: `__Secure-next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        secure: true,  // Forces secure cookie
+        sameSite: "none", // Required for cross-origin authentication
+      },
+    },
+  },
+  useSecureCookies: true,
+  debug: true,  // Enable for debugging
   callbacks: {
     jwt: async ({ token, account }) => {
       if (account) {
