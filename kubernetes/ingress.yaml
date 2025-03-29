@@ -2,20 +2,23 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: sport-matchmaking-frontend-ingress
+  annotations:
+    # use the shared ingress-nginx
+    kubernetes.io/ingress.class: "nginx"
 spec:
   defaultBackend:
     service:
       name: sport-matchmaking-frontend
       port:
         number: 3000
-  # rules:
-  #   # - host: <Host>
-  #   - http:
-  #       paths:
-  #         - pathType: Prefix
-  #           path: "/"
-  #           backend:
-  #             service:
-  #               name: sport-matchmaking-frontend
-  #               port:
-  #                 number: 3000
+  rules:
+    - host: "web.sport-matchmaking.test"
+    - http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: sport-matchmaking-frontend
+                port:
+                  number: 3000
