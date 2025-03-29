@@ -38,6 +38,18 @@ import { fetchUserInfo } from "@/app/lib/keycloak";
 
 // const drawerWidth = 240;
 
+export async function generateMetadata({ params }: { params: { id: string } }) {
+
+  const event = await fetch(`${matchServiceURL}/matches/${params.id}`).then((res) =>
+    res.json()
+  );
+
+  return {
+    title: `${event.sport} - Detail | Sport Matchmaking`,
+    description: `Details for the match ${event.sport}.`,
+  };
+}
+
 export default async function EventDetailsPage({
   params,
 }: Readonly<{
