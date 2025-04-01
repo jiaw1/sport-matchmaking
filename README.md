@@ -1,4 +1,4 @@
-# Sport Matchmaking Webapp
+# Sport Matchmaking Web App
 
 Sport Matchmaking is a web app that helps students and staff easily arrange, join, and discover sport matches on campus. It was designed and developed as part of the course CS-E4400 Design of WWW Services at Aalto University.
 
@@ -72,12 +72,12 @@ kubectl create secret generic sport-matchmaking-frontend-secrets
   --from-literal=key2=value2
 ```
 
-### Change match service URL
+### Add match service URL
 
 Edit `./app/lib/definitions.ts`, line 10:
 
 ```TypeScript
-export const matchServiceURL = "https://match-service.sport-matchmaking.thong.cam" // Replace with match service URL. 
+export const matchServiceURL = "https://match-service.sport-matchmaking.thong.cam" // Replace with your match service URL. 
 ```
 
 ### Build Docker image
@@ -86,7 +86,7 @@ export const matchServiceURL = "https://match-service.sport-matchmaking.thong.ca
 docker build -t sport-matchmaking-frontend .
 ```
 
-Optionally push the image to your chosen Container Image Repository.
+Optionally push the image to your Container Image Repository of choice.
 
 ### Run on Kubernetes
 
@@ -133,6 +133,13 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Known issues
+
+🚧 Users have to click on the log-in button twice on Safari iOS. First attempt always fails.
+
+🚧 UI components sometimes fail to update to new state after user actions (e.g. joining match).
+
+🚧 Fail to logout users after authentication token expiry.
 
 ## Learn More
 
